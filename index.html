@@ -94,6 +94,38 @@
             position: relative;
         }
 
+        #screen_score {
+            background: url('assets/images/Screen_score.png') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+        /* ========== ВЕРСИЯ ИГРЫ ========== */
+        .game-version {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            color: #8B0000;
+            font-size: 40px;
+            font-family: Arial, sans-serif;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .info-version {
+            position: absolute;
+            top: 550px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #8B0000;
+            font-size: 40px;
+            font-family: Arial, sans-serif;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            text-align: center;
+            white-space: nowrap;
+        }
+
         /* ========== ЭКРАН НАСТРОЕК ========== */
         .choice-image {
             width: 600px;
@@ -162,19 +194,25 @@
             gap: 15px;
         }
 
-        .info-btn {
+        .info-buttons {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            bottom: 550px;
+            display: flex;
+            gap: 120px;
+        }
+
+        .info-btn {
             cursor: pointer;
             transition: transform 0.2s;
             width: 100px;
             height: auto;
-            bottom: 550px;
+            display: block;
         }
 
         .info-btn:active {
-            transform: translateX(-50%) scale(0.9);
+            transform: scale(0.9);
         }
 
         .fight-btn {
@@ -352,11 +390,63 @@
         .final-btn:active {
             transform: translateX(-50%) scale(0.9);
         }
+
+        /* ========== ЭКРАН СТАТИСТИКИ ========== */
+        .score-content {
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            text-align: center;
+        }
+
+        .stats-list {
+            padding: 40px;
+            margin-bottom: 50px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 30px 20px;
+        }
+
+        .stat-label {
+            font-size: 65px;
+            color: #444444;
+            text-shadow: 2px 2px 4px black;
+        }
+
+        .stat-value {
+            font-size: 65px;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 2px 2px 4px black;
+        }
+
+        .score-menu-btn {
+            width: 500px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: absolute;
+            bottom: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .score-menu-btn:active {
+            transform: translateX(-50%) scale(0.95);
+        }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <div id="screen_start" class="screen active"></div>
+        <div id="screen_start" class="screen active">
+            <div class="game-version" id="game-version-start"></div>
+        </div>
 
         <div id="screen_settings" class="screen">
             <div class="block-field">
@@ -387,7 +477,11 @@
                 <img src="assets/images/Button_right_3_2.png" alt="Вправо" class="arrow-btn" id="btn-sound-right">
             </div>
 
-            <img src="assets/images/button_info.png" alt="Информация" class="info-btn" id="btn-info">
+            <div class="info-buttons">
+                <img src="assets/images/Button_info.png" alt="Информация" class="info-btn" id="btn-info">
+                <img src="assets/images/Button_score.png" alt="Статистика" class="info-btn" id="btn-to-score">
+            </div>
+
             <img src="assets/images/Button_to_fight.png" alt="Сражаться" class="fight-btn" id="btn-to-fight">
         </div>
 
@@ -435,11 +529,51 @@
         </div>
 
         <div id="screen_info" class="screen">
+            <div class="info-version" id="game-version-info"></div>
             <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu">
+        </div>
+
+        <div id="screen_score" class="screen">
+            <div class="score-content">
+                <div class="stats-list">
+                    <div class="stat-row">
+                        <span class="stat-label">Всего игр</span>
+                        <span class="stat-value" id="stat-total">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Побед</span>
+                        <span class="stat-value" id="stat-wins">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Поражений</span>
+                        <span class="stat-value" id="stat-losses">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Процент побед</span>
+                        <span class="stat-value" id="stat-percent">0%</span>
+                    </div>
+                </div>
+            </div>
+            <img src="assets/images/Button_to_menu_1.png" alt="В меню" class="score-menu-btn" id="btn-score-to-menu">
         </div>
     </div>
 
     <script>
+        // ========== ВЕРСИЯ ИГРЫ ==========
+        const GAME_VERSION = "1.0.0";  // Здесь меняйте версию
+
+        // Установка версии на страницах
+        function setGameVersions() {
+            const versionStart = document.getElementById('game-version-start');
+            const versionInfo = document.getElementById('game-version-info');
+            if (versionStart) {
+                versionStart.textContent = `v${GAME_VERSION}`;
+            }
+            if (versionInfo) {
+                versionInfo.textContent = `Версия: ${GAME_VERSION}`;
+            }
+        }
+
         // ========== ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ ==========
         function switchScreen(screenId) {
             if (screenId !== 'screen_game') {
@@ -462,10 +596,50 @@
         }
 
         window.addEventListener('load', () => {
+            setGameVersions();
             setTimeout(() => {
                 switchScreen('screen_settings');
             }, 3000);
         });
+
+        // ========== ИСТОРИЯ ИГР (СТАТИСТИКА) ==========
+        const STATS_KEY = 'chapaev_stats';
+
+        function getStats() {
+            const saved = localStorage.getItem(STATS_KEY);
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return { total: 0, wins: 0, losses: 0 };
+        }
+
+        function saveStats(stats) {
+            localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+        }
+
+        function addGameResult(isWin) {
+            const stats = getStats();
+            stats.total++;
+            if (isWin) {
+                stats.wins++;
+            } else {
+                stats.losses++;
+            }
+            saveStats(stats);
+        }
+
+        function updateStatsDisplay() {
+            const stats = getStats();
+            document.getElementById('stat-total').textContent = stats.total;
+            document.getElementById('stat-wins').textContent = stats.wins;
+            document.getElementById('stat-losses').textContent = stats.losses;
+            
+            let percent = 0;
+            if (stats.total > 0) {
+                percent = Math.round((stats.wins / stats.total) * 100);
+            }
+            document.getElementById('stat-percent').textContent = percent + '%';
+        }
 
         // ========== ЗВУКИ ==========
         let isSoundEnabled = true;
@@ -564,6 +738,12 @@
             switchScreen('screen_info');
         });
 
+        document.getElementById('btn-to-score').addEventListener('click', () => {
+            playSound('OpenNewFormSound.mp3');
+            updateStatsDisplay();
+            switchScreen('screen_score');
+        });
+
         // ========== ЛОГИРОВАНИЕ ==========
         const LOG_URL = 'https://script.google.com/macros/s/AKfycbylFYeOaTzjUX9STu_X-EGu8scGCGC7E6sDCSf6xgzKiGkJssr5N56Lre08E6yRMZv_-g/exec';
 
@@ -648,8 +828,7 @@
         let isPhysicsRunning = false;
 
         // ----- СДВИГ ПОЛЯ -----
-        let currentScrollPosition = 'center'; // 'left', 'center', 'right'
-        const SCROLL_OFFSET = 350; // Величина сдвига в пикселях
+        let currentScrollPosition = 'center';
 
         function updateScrollPosition() {
             const scrollContainer = document.getElementById('game-scroll-container');
@@ -672,7 +851,6 @@
             }
             
             scrollContainer.style.transform = `translateX(${translateX}px)`;
-            console.log('Сдвиг поля:', currentScrollPosition, translateX);
         }
 
         class PhysicsStone {
@@ -874,6 +1052,9 @@
                         currentWhiteY = Math.max(START_WHITE_Y, Math.min(MAX_WHITE_Y, currentWhiteY));
                         
                         if (redLines >= 7) {
+                            if (isComputerMode) {
+                                addGameResult(true);
+                            }
                             playSound('WinSound.mp3');
                             setTimeout(() => switchScreen('screen_final_win'), 2000);
                             return;
@@ -904,6 +1085,9 @@
                         currentWhiteY = Math.max(START_WHITE_Y, Math.min(MAX_WHITE_Y, currentWhiteY));
                         
                         if (whiteLines >= 7) {
+                            if (isComputerMode) {
+                                addGameResult(false);
+                            }
                             playSound('LoseSound.mp3');
                             setTimeout(() => switchScreen('screen_final_win'), 2000);
                             return;
@@ -1098,6 +1282,14 @@
                         
                         let score = (redDead * 100) - (whiteDead * 50);
                         if (redDead === 0) score -= 30;
+                        
+                        if (whiteStones.length === 1) {
+                            if (redDead === 0) {
+                                score = -10000;
+                            } else {
+                                score = redDead * 1000;
+                            }
+                        }
                         
                         if (score > bestScore) {
                             bestScore = score;
@@ -1445,19 +1637,27 @@
             stopPhysics();
             switchScreen('screen_settings');
         });
+        
         document.getElementById('btn-win-to-menu').addEventListener('click', () => {
             playSound('OpenNewFormSound.mp3');
             stopPhysics();
             switchScreen('screen_settings');
         });
+        
         document.getElementById('btn-lost-to-menu').addEventListener('click', () => {
             playSound('OpenNewFormSound.mp3');
             stopPhysics();
             switchScreen('screen_settings');
         });
+        
         document.getElementById('btn-info-to-menu').addEventListener('click', () => {
             playSound('OpenNewFormSound.mp3');
             stopPhysics();
+            switchScreen('screen_settings');
+        });
+        
+        document.getElementById('btn-score-to-menu').addEventListener('click', () => {
+            playSound('OpenNewFormSound.mp3');
             switchScreen('screen_settings');
         });
         
