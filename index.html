@@ -1267,13 +1267,11 @@
                         currentWhiteY = Math.max(START_WHITE_Y, Math.min(MAX_WHITE_Y, currentWhiteY));
                         
                         if (redLines >= 7) {
-                            if (isComputerMode) {
-                                await addGameResult(true);
-                            }
-                            playSound('WinSound.mp3');
-                            setTimeout(() => switchScreen('screen_final_win'), 2000);
-                            return;
-                        }
+    await addGameResult(true);  // ← Сохраняем всегда, независимо от режима
+    playSound('WinSound.mp3');
+    setTimeout(() => switchScreen('screen_final_win'), 2000);
+    return;
+}
                         
                         playSound('EndRoundSound.mp3');
                         placeStonesWithOffset(currentRedY, currentWhiteY);
@@ -1306,13 +1304,11 @@
                         currentWhiteY = Math.max(START_WHITE_Y, Math.min(MAX_WHITE_Y, currentWhiteY));
                         
                         if (whiteLines >= 7) {
-                            if (isComputerMode) {
-                                await addGameResult(false);
-                            }
-                            playSound('LoseSound.mp3');
-                            setTimeout(() => switchScreen('screen_final_lost'), 2000);
-                            return;
-                        }
+    await addGameResult(false);  // ← Сохраняем всегда
+    playSound('LoseSound.mp3');
+    setTimeout(() => switchScreen('screen_final_lost'), 2000);
+    return;
+}
                         
                         playSound('EndRoundSound.mp3');
                         placeStonesWithOffset(currentRedY, currentWhiteY);
