@@ -657,9 +657,13 @@
                         break;
 
                     case 'VKWebAppBannerAdClosedByUser':
-                        console.log('👆 Пользователь закрыл баннер');
-                        bannerShown = false;
-                        break;
+    console.log('👆 Пользователь закрыл баннер');
+    bannerShown = false;
+    // ВАЖНО: Возобновляем игру после закрытия рекламы
+    if (isGameActive) {
+        resumeGame();
+    }
+    break;
                 }
             });
 
@@ -700,62 +704,68 @@
         }
 
         function resumeGame() {
-            if (isGameActive && isGamePaused) {
-                console.log('▶️ Возобновление игры (из фона)');
-                isGamePaused = false;
+    console.log('▶️ Возобновление игры (из фона или после рекламы)');
+    
+    // Если игра была на паузе из-за фона - восстанавливаем состояние
+    if (isGamePaused) {
+        isGamePaused = false;
+        
+        if (savedGameState) {
+            turnFlag = savedGameState.turnFlag;
+            redLines = savedGameState.redLines;
+            whiteLines = savedGameState.whiteLines;
+            currentRedY = savedGameState.currentRedY;
+            currentWhiteY = savedGameState.currentWhiteY;
 
-                if (savedGameState) {
-                    turnFlag = savedGameState.turnFlag;
-                    redLines = savedGameState.redLines;
-                    whiteLines = savedGameState.whiteLines;
-                    currentRedY = savedGameState.currentRedY;
-                    currentWhiteY = savedGameState.currentWhiteY;
+            document.getElementById('red-score').textContent = savedGameState.redScore;
+            document.getElementById('white-score').textContent = savedGameState.whiteScore;
 
-                    document.getElementById('red-score').textContent = savedGameState.redScore;
-                    document.getElementById('white-score').textContent = savedGameState.whiteScore;
+            // Обновляем индикатор хода
+            updateTurnIndicator();
 
-                    // ВАЖНО: Обновляем индикатор хода
-                    updateTurnIndicator();
-
-                    savedGameState.stones.forEach((savedStone, index) => {
-                        if (index < stonesList.length) {
-                            const stone = stonesList[index];
-                            stone.x = savedStone.x;
-                            stone.y = savedStone.y;
-                            stone.vx = savedStone.vx;
-                            stone.vy = savedStone.vy;
-                            stone.active = savedStone.active;
-                            if (stone.element) {
-                                if (stone.active) {
-                                    stone.element.style.display = 'block';
-                                    stone.element.style.left = `${stone.x - stone.radius}px`;
-                                    stone.element.style.top = `${stone.y - stone.radius}px`;
-                                } else {
-                                    stone.element.style.display = 'none';
-                                }
-                            }
+            savedGameState.stones.forEach((savedStone, index) => {
+                if (index < stonesList.length) {
+                    const stone = stonesList[index];
+                    stone.x = savedStone.x;
+                    stone.y = savedStone.y;
+                    stone.vx = savedStone.vx;
+                    stone.vy = savedStone.vy;
+                    stone.active = savedStone.active;
+                    if (stone.element) {
+                        if (stone.active) {
+                            stone.element.style.display = 'block';
+                            stone.element.style.left = `${stone.x - stone.radius}px`;
+                            stone.element.style.top = `${stone.y - stone.radius}px`;
+                        } else {
+                            stone.element.style.display = 'none';
                         }
-                    });
-
-                    savedGameState = null;
+                    }
                 }
+            });
 
-                // Критически важно: сбрасываем состояние перетаскивания
-                isDragging = false;
-                selectedStone = null;
-                removeAimLine();
-
-                // Запускаем физику, если игра активна и она не запущена
-                if (isGameActive && !isPhysicsRunning) {
-                    startPhysics();
-                    console.log('✅ Физика запущена');
-                }
-
-                // Дополнительное обновление для гарантии
-                updateTurnIndicator();
-                console.log('🔄 Индикатор хода обновлён, turnFlag =', turnFlag);
-            }
+            savedGameState = null;
         }
+    }
+    
+    // Сбрасываем состояние перетаскивания ТОЛЬКО если оно было "залипшим"
+    // Не сбрасываем всегда, чтобы не мешать захвату шашек
+    if (isDragging) {
+        isDragging = false;
+        selectedStone = null;
+        removeAimLine();
+    }
+
+    // Запускаем физику, если игра активна и она не запущена
+    if (isGameActive && !isPhysicsRunning) {
+        startPhysics();
+        console.log('✅ Физика запущена');
+    }
+
+    // Обновляем индикатор хода для гарантии
+    updateTurnIndicator();
+    console.log('🔄 Индикатор хода обновлён, turnFlag =', turnFlag);
+}
+        
 
         // ========== ПРИМЕНЕНИЕ ТЕМЫ ==========
         function applyTheme(scheme) {
