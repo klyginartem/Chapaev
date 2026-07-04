@@ -560,45 +560,103 @@
         @media (max-width: 768px) {
             /* ===== ЭКРАН СТАТИСТИКИ ===== */
             .score-content {
-                width: 95%;
+                width: 95% !important;
+                max-width: 95% !important;
                 top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) !important;
             }
 
             .stats-list {
-                padding: 15px 10px;
-                margin-bottom: 20px;
+                padding: 15px 15px !important;
+                margin-bottom: 20px !important;
             }
 
             .stat-row {
-                padding: 12px 10px;
+                padding: 12px 5px !important;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                flex-wrap: wrap;
             }
 
             .stat-label {
-                font-size: 28px !important;
+                font-size: 24px !important;
+                color: #444444;
+                text-shadow: none;
             }
 
             .stat-value {
-                font-size: 28px !important;
+                font-size: 24px !important;
+                font-weight: bold;
+                color: #ff0000;
+                text-shadow: none;
             }
 
             .score-menu-btn {
-                width: 80%;
-                bottom: 150px;
+                width: 80% !important;
+                max-width: 400px !important;
+                bottom: 150px !important;
+                left: 50%;
+                transform: translateX(-50%);
             }
-        }
-        .score-menu-btn {
-            width: 500px;
-            height: auto;
-            cursor: pointer;
-            transition: transform 0.2s;
-            position: absolute;
-            bottom: 300px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
 
-        .score-menu-btn:active {
-            transform: translateX(-50%) scale(0.95);
+            /* ===== ЭКРАН ИНФОРМАЦИИ ===== */
+            .info-version {
+                font-size: 24px !important;
+                top: 150px !important;
+                white-space: nowrap;
+            }
+
+            .info-text {
+                top: 250px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 92% !important;
+                max-width: 92% !important;
+                font-size: 18px !important;
+                line-height: 1.6 !important;
+                padding: 0 15px !important;
+                box-sizing: border-box;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+
+            .info-text-content {
+                width: 100% !important;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+
+            .info-arrow-btn {
+                bottom: 350px !important;
+                width: 40px !important;
+            }
+
+            .info-arrow-right {
+                right: 15px !important;
+            }
+
+            .info-arrow-left {
+                left: 15px !important;
+            }
+
+            /* ===== ВСЕ КНОПКИ "В МЕНЮ" ===== */
+            .final-btn {
+                width: 80% !important;
+                max-width: 400px !important;
+                bottom: 120px !important;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            #info-page-2 .final-btn {
+                width: 80% !important;
+                max-width: 400px !important;
+                bottom: 120px !important;
+                left: 50%;
+                transform: translateX(-50%);
+            }
         }
 
         .lang-buttons {
@@ -615,80 +673,13 @@
             display: block;
         }
 
-        .lang-btn:active {
-            transform: scale(0.9);
-        }
-
-        .lang-btn.hidden {
-            display: none;
-        }
-        /* ========== АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ========== */
-        @media (max-width: 768px) {
-            /* ===== ЭКРАН СТАТИСТИКИ ===== */
-            .score-content {
-                width: 95%;
-                top: 50%;
+            .lang-btn:active {
+                transform: scale(0.9);
             }
 
-            .stats-list {
-                padding: 15px 10px;
-                margin-bottom: 20px;
+            .lang-btn.hidden {
+                display: none;
             }
-
-            .stat-row {
-                padding: 12px 10px;
-            }
-
-            .stat-label {
-                font-size: 28px !important;
-            }
-
-            .stat-value {
-                font-size: 28px !important;
-            }
-
-            .score-menu-btn {
-                width: 80%;
-                bottom: 150px;
-            }
-
-            /* ===== ЭКРАН ИНФОРМАЦИИ ===== */
-            .info-version {
-                font-size: 28px;
-                top: 180px;
-            }
-
-            .info-text {
-                top: 300px;
-                width: 92%;
-                max-width: 92%;
-                font-size: 22px;
-                line-height: 1.4;
-            }
-
-            .info-arrow-btn {
-                bottom: 400px;
-                width: 50px;
-            }
-
-            .info-arrow-right {
-                right: 20px;
-            }
-
-            .info-arrow-left {
-                left: 20px;
-            }
-
-            .final-btn {
-                width: 80%;
-                bottom: 200px;
-            }
-
-            #info-page-2 .final-btn {
-                width: 80%;
-                bottom: 200px;
-            }
-        }
     </style>
 </head>
 <body>
