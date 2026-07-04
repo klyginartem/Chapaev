@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Чапаев — последний бой!</title>
     <style>
         * {
@@ -147,7 +147,7 @@
             left: 50%;
             transform: translateX(-50%);
             color: #8B0000;
-            font-size: 40px;
+            font-size: clamp(20px, 3vw, 40px);
             font-family: Arial, sans-serif;
             text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
             text-align: center;
@@ -155,17 +155,19 @@
         }
 
         .info-text {
-            position: absolute;
-            top: 400px;
+            top: 20%; /* Относительно высоты экрана */
             left: 50%;
             transform: translateX(-50%);
-            width: 800px;
-            max-width: 90%;
+            width: 92%;
+            max-width: 600px;
             text-align: left;
             font-family: Arial, sans-serif;
-            font-size: 40px;
+            font-size: 3.2vw; /* Относительно ширины окна, но без !important */
             color: #000000;
-            line-height: 1.5;
+            line-height: 1.6;
+            padding: 0 15px;
+            box-sizing: border-box;
+            word-wrap: break-word;
         }
 
         .info-text-content {
@@ -510,12 +512,18 @@
         .final-btn {
             cursor: pointer;
             transition: transform 0.2s;
-            width: 500px;
+            width: min(320px, 85%);
             height: auto;
             position: absolute;
-            bottom: 350px;
+            bottom: 8%; /* Относительно высоты экрана */
             left: 50%;
             transform: translateX(-50%);
+            z-index: 10;
+            padding: 15px 0;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .final-btn:active {
@@ -545,35 +553,37 @@
         }
 
         .stat-label {
-            font-size: 50px;
+            font-size: 5%; /* Относительно ширины родителя .score-content (900px → 45px на десктопе) */
             color: #444444;
             text-shadow: none;
+            white-space: nowrap; /* Чтобы не переносилось на мобильных */
         }
 
         .stat-value {
-            font-size: 50px;
+            font-size: 5%;
             font-weight: bold;
             color: #ff0000;
             text-shadow: none;
+            white-space: nowrap;
         }
-        /* ========== АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ========== */
+        /* ========== АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ ========== */
         @media (max-width: 768px) {
-            /* ===== ЭКРАН СТАТИСТИКИ ===== */
+            /* ===== СТАТИСТИКА ===== */
             .score-content {
-                width: 95% !important;
-                max-width: 95% !important;
+                width: 95%;
+                max-width: 95%;
                 top: 50%;
                 left: 50%;
-                transform: translate(-50%, -50%) !important;
+                transform: translate(-50%, -50%);
             }
 
             .stats-list {
-                padding: 15px 15px !important;
-                margin-bottom: 20px !important;
+                padding: 15px 10px;
+                margin-bottom: 20px;
             }
 
             .stat-row {
-                padding: 12px 5px !important;
+                padding: 10px 5px;
                 display: flex;
                 justify-content: space-between;
                 align-items: baseline;
@@ -581,79 +591,67 @@
             }
 
             .stat-label {
-                font-size: 24px !important;
-                color: #444444;
-                text-shadow: none;
+                font-size: 4.5%;
+                white-space: nowrap;
             }
 
             .stat-value {
-                font-size: 24px !important;
-                font-weight: bold;
-                color: #ff0000;
-                text-shadow: none;
+                font-size: 4.5%;
+                white-space: nowrap;
             }
 
             .score-menu-btn {
-                width: 80% !important;
-                max-width: 400px !important;
-                bottom: 150px !important;
+                width: 85%;
+                max-width: 320px;
+                bottom: 8%;
                 left: 50%;
                 transform: translateX(-50%);
             }
 
-            /* ===== ЭКРАН ИНФОРМАЦИИ ===== */
+            /* ===== ИНФОРМАЦИЯ ===== */
             .info-version {
-                font-size: 24px !important;
-                top: 150px !important;
+                font-size: 3.5vw;
+                top: 12%;
                 white-space: nowrap;
             }
 
             .info-text {
-                top: 250px !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                width: 92% !important;
-                max-width: 92% !important;
-                font-size: 18px !important;
-                line-height: 1.6 !important;
-                padding: 0 15px !important;
+                top: 20%;
+                width: 92%;
+                max-width: 92%;
+                font-size: 3.5vw;
+                line-height: 1.6;
+                padding: 0 15px;
                 box-sizing: border-box;
                 word-wrap: break-word;
-                overflow-wrap: break-word;
-            }
-
-            .info-text-content {
-                width: 100% !important;
-                word-wrap: break-word;
-                overflow-wrap: break-word;
             }
 
             .info-arrow-btn {
-                bottom: 350px !important;
-                width: 40px !important;
+                bottom: 25%;
+                width: 40px;
             }
 
             .info-arrow-right {
-                right: 15px !important;
+                right: 15px;
             }
 
             .info-arrow-left {
-                left: 15px !important;
+                left: 15px;
             }
 
-            /* ===== ВСЕ КНОПКИ "В МЕНЮ" ===== */
+            /* ===== КНОПКИ "В МЕНЮ" ===== */
             .final-btn {
-                width: 80% !important;
-                max-width: 400px !important;
-                bottom: 120px !important;
+                width: 85%;
+                max-width: 320px;
+                bottom: 8%;
                 left: 50%;
                 transform: translateX(-50%);
             }
 
             #info-page-2 .final-btn {
-                width: 80% !important;
-                max-width: 400px !important;
-                bottom: 120px !important;
+                width: 85%;
+                max-width: 320px;
+                bottom: 8%;
                 left: 50%;
                 transform: translateX(-50%);
             }
@@ -1341,7 +1339,7 @@
         }
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.0.1";
+        const GAME_VERSION = "1.0.1a";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
