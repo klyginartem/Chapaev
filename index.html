@@ -556,7 +556,36 @@
             color: #ff0000;
             text-shadow: none;
         }
+        /* ========== АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ========== */
+        @media (max-width: 768px) {
+            /* ===== ЭКРАН СТАТИСТИКИ ===== */
+            .score-content {
+                width: 95%;
+                top: 50%;
+            }
 
+            .stats-list {
+                padding: 15px 10px;
+                margin-bottom: 20px;
+            }
+
+            .stat-row {
+                padding: 12px 10px;
+            }
+
+            .stat-label {
+                font-size: 28px !important;
+            }
+
+            .stat-value {
+                font-size: 28px !important;
+            }
+
+            .score-menu-btn {
+                width: 80%;
+                bottom: 150px;
+            }
+        }
         .score-menu-btn {
             width: 500px;
             height: auto;
@@ -592,6 +621,73 @@
 
         .lang-btn.hidden {
             display: none;
+        }
+        /* ========== АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ========== */
+        @media (max-width: 768px) {
+            /* ===== ЭКРАН СТАТИСТИКИ ===== */
+            .score-content {
+                width: 95%;
+                top: 50%;
+            }
+
+            .stats-list {
+                padding: 15px 10px;
+                margin-bottom: 20px;
+            }
+
+            .stat-row {
+                padding: 12px 10px;
+            }
+
+            .stat-label {
+                font-size: 28px !important;
+            }
+
+            .stat-value {
+                font-size: 28px !important;
+            }
+
+            .score-menu-btn {
+                width: 80%;
+                bottom: 150px;
+            }
+
+            /* ===== ЭКРАН ИНФОРМАЦИИ ===== */
+            .info-version {
+                font-size: 28px;
+                top: 180px;
+            }
+
+            .info-text {
+                top: 300px;
+                width: 92%;
+                max-width: 92%;
+                font-size: 22px;
+                line-height: 1.4;
+            }
+
+            .info-arrow-btn {
+                bottom: 400px;
+                width: 50px;
+            }
+
+            .info-arrow-right {
+                right: 20px;
+            }
+
+            .info-arrow-left {
+                left: 20px;
+            }
+
+            .final-btn {
+                width: 80%;
+                bottom: 200px;
+            }
+
+            #info-page-2 .final-btn {
+                width: 80%;
+                bottom: 200px;
+            }
         }
     </style>
 </head>
@@ -1254,7 +1350,7 @@
         }
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.0.0";
+        const GAME_VERSION = "1.0.1";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
