@@ -665,6 +665,17 @@
                     <img src="assets/images/Button_lang_EN.png" alt="English" class="lang-btn hidden" id="btn-lang-en">
                 </div>
                 <img src="assets/images/Button_score.png" alt="Статистика" class="info-btn" id="btn-to-score">
+                <img src="assets/images/VK_AEK_games.png"
+                     alt="Сообщество АЕК игры"
+                     class="info-btn"
+                     id="btn-to-community"
+                     style="cursor: pointer; transition: transform 0.2s;"
+                     onmousedown="this.style.transform='scale(0.9)'"
+                     onmouseup="this.style.transform='scale(1)'"
+                     onmouseleave="this.style.transform='scale(1)'"
+                     ontouchstart="this.style.transform='scale(0.9)'"
+                     ontouchend="this.style.transform='scale(1)'"
+                     onclick="window.open('https://vk.ru/aekgames', '_blank'); playSound('OpenNewFormSound.mp3');">
             </div>
 
             <img src="assets/images/Button_to_fight.png" alt="Сражаться" class="fight-btn" id="btn-to-fight">
@@ -1277,7 +1288,7 @@
         }
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.0.1";
+        const GAME_VERSION = "1.0.2";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
