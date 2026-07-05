@@ -134,30 +134,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: block;
         }
 
             .info-page.hidden {
                 display: none;
             }
 
-        /* НОВЫЙ КОНТЕЙНЕР - как .score-content */
-        .info-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 92%;
-            max-width: 800px;
-            gap: 30px;
-            text-align: center;
-        }
-
         .info-version {
+            position: absolute;
+            top: 250px;
+            left: 50%;
+            transform: translateX(-50%);
             color: #8B0000;
-            font-size: clamp(20px, 3vw, 40px);
+            font-size: 36px;
             font-family: Arial, sans-serif;
             text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
             text-align: center;
@@ -165,62 +155,78 @@
         }
 
         .info-text {
-            width: 100%;
-            max-width: 100%;
+            position: absolute;
+            top: 350px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            max-width: 850px;
             text-align: left;
             font-family: Arial, sans-serif;
-            font-size: clamp(16px, 2.5vw, 36px);
+            font-size: 34px;
             color: #000000;
-            line-height: 1.6;
-            padding: 0 15px;
-            box-sizing: border-box;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            line-height: 1.5;
         }
 
         .info-text-content {
             width: 100%;
         }
 
-        /* РЯД С КНОПКАМИ - как .action-buttons в игре! */
-        .info-buttons-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-            width: 100%;
-            flex-wrap: wrap;
+        .info-text-ru,
+        .info-text-en,
+        .info-text-ru-2,
+        .info-text-en-2 {
+            display: block;
         }
 
-        /* Кнопки навигации - ТЕПЕРЬ В ПОТОКЕ! */
+            .info-text-ru.hidden,
+            .info-text-en.hidden,
+            .info-text-ru-2.hidden,
+            .info-text-en-2.hidden {
+                display: none;
+            }
+
+        /* Кнопки навигации */
         .info-arrow-btn {
+            position: absolute;
+            bottom: 500px;
             cursor: pointer;
             transition: transform 0.2s;
-            width: min(60px, 10vw);
+            width: 110px;
             height: auto;
-            /* НЕТ position: absolute! */
+            display: block;
         }
 
             .info-arrow-btn:active {
                 transform: scale(0.9);
             }
 
-        /* Кнопка "В меню" - ТЕПЕРЬ В ПОТОКЕ! */
-        .final-btn {
-            cursor: pointer;
-            transition: transform 0.2s;
-            width: min(300px, 60%);
-            height: auto;
-            /* НЕТ position: absolute! */
-            /* НЕТ bottom, left! */
+        .info-arrow-right {
+            right: 80px;
         }
 
-            .final-btn:active {
-                transform: scale(0.9);
-            }
+        .info-arrow-left {
+            left: 80px;
+        }
 
-        /* Убираем старые позиционирования для стрелок */
-        /* .info-arrow-right, .info-arrow-left - УДАЛИТЬ */
+        /* Кнопка "В меню" на обеих страницах */
+        #info-page-1 .final-btn,
+        #info-page-2 .final-btn {
+            position: absolute;
+            bottom: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 70%;
+            max-width: 500px;
+            height: auto;
+        }
+
+            #info-page-1 .final-btn:active,
+            #info-page-2 .final-btn:active {
+                transform: translateX(-50%) scale(0.9);
+            }
 
         /* ========== ЭКРАН НАСТРОЕК ========== */
         .choice-image {
@@ -522,22 +528,16 @@
         /* ========== ЭКРАН СТАТИСТИКИ ========== */
         .score-content {
             position: absolute;
-            top: 50%;
+            top: 48%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 900px;
-            max-width: 95%;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 40px; /* ← Отступ между статистикой и кнопкой */
         }
 
         .stats-list {
             padding: 40px;
-            width: 100%;
-            box-sizing: border-box;
+            margin-bottom: 50px;
         }
 
         .stat-row {
@@ -548,70 +548,33 @@
         }
 
         .stat-label {
-            font-size: clamp(18px, 3.5vw, 50px);
+            font-size: 50px;
             color: #444444;
             text-shadow: none;
         }
 
         .stat-value {
-            font-size: clamp(18px, 3.5vw, 50px);
+            font-size: 50px;
             font-weight: bold;
             color: #ff0000;
             text-shadow: none;
         }
 
-        /* Кнопка "В меню" на статистике - ТЕПЕРЬ В ПОТОКЕ! */
         .score-menu-btn {
-            width: min(400px, 85%);
+            width: 500px;
             height: auto;
             cursor: pointer;
             transition: transform 0.2s;
-            /* НЕТ position: absolute! */
-            /* НЕТ bottom, left! */
+            position: absolute;
+            bottom: 300px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-            .score-menu-btn:active {
-                transform: scale(0.95);
-            }
-        /* ========== АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ ========== */
-        @media (max-width: 768px) {
-            /* ===== ЭКРАН СТАТИСТИКИ ===== */
-            .score-content {
-                width: 95%;
-                max-width: 95%;
-                gap: 30px; /* ← Меньше отступ на мобильных */
-            }
-
-            .stats-list {
-                padding: 15px 10px;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            .stat-row {
-                padding: 12px 5px;
-                display: flex;
-                justify-content: space-between;
-                align-items: baseline;
-                flex-wrap: wrap;
-            }
-
-            .stat-label {
-                font-size: clamp(14px, 3vw, 20px);
-                white-space: nowrap;
-            }
-
-            .stat-value {
-                font-size: clamp(14px, 3vw, 20px);
-                white-space: nowrap;
-            }
-
-            .score-menu-btn {
-                width: 85%;
-                max-width: 400px;
-            }
+        .score-menu-btn:active {
+            transform: translateX(-50%) scale(0.95);
         }
-}
+
         .lang-buttons {
             display: flex;
             gap: 10px;
@@ -633,7 +596,6 @@
         .lang-btn.hidden {
             display: none;
         }
-
     </style>
 </head>
 <body>
@@ -732,33 +694,46 @@
         </div>
 
         <!-- ====== ЭКРАН ИНФОРМАЦИИ ====== -->
-        <div id="screen_info" class="screen">
-            <!-- Страница 1 -->
-            <div class="info-page" id="info-page-1">
-                <div class="info-version" id="game-version-info"></div>
-                <div class="info-text">
-                    <div class="info-text-content">
-                        <span class="info-text-ru">...</span>
-                        <span class="info-text-en hidden">...</span>
-                    </div>
-                </div>
-                <img src="assets/images/Button_turn_right.png" alt="Вправо" class="info-arrow-btn info-arrow-right" id="btn-info-right">
-                <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-1">
-            </div>
 
-            <!-- Страница 2 -->
-            <div class="info-page hidden" id="info-page-2">
-                <div class="info-version" id="game-version-info-2"></div>
-                <div class="info-text">
-                    <div class="info-text-content">
-                        <span class="info-text-ru-2">...</span>
-                        <span class="info-text-en-2 hidden">...</span>
-                    </div>
-                </div>
-                <img src="assets/images/Button_turn_left.png" alt="Влево" class="info-arrow-btn info-arrow-left" id="btn-info-left">
-                <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-2">
+<div id="screen_info" class="screen">
+    <!-- Страница 1 -->
+    <div class="info-page" id="info-page-1">
+        <div class="info-version" id="game-version-info"></div>
+        <div class="info-text">
+            <div class="info-text-content">
+                <span class="info-text-ru">*ЦЕЛЬ ИГРЫ:*<br>
+                Выбейте все шашки противника с игрового поля. Игроки по очереди наносят удары. Очередность первого хода определяется настройками игры. Проигравший раунд всегда начинает первым. Игрок, выбивший все шашки соперника, перемещает свои шашки на одну линию вперед. Проигравший игрок отступает на одну линию назад, если до этого его шашки продвигались вперед. Постепенно шашки противников сближаются настолько, что оказываются рядом друг с другом. Игра заканчивается, когда один игрок вытолкнет шашки другого игрока с последней линии. В решающей битве на последней линии первый ход всегда делает проигрывающий игрок.</span>
+                <span class="info-text-en hidden">*GAME OBJECTIVE:*<br>
+                Knock all of the opponent's checkers off the board. Players take turns making moves. The order of the first move is determined by the game settings. The player who loses a round always goes first. The player who knocks all of the opponent's checkers moves their own checkers one row forward. The losing player moves back one row if their checkers had previously advanced. Gradually, the opponents' checkers come closer until they are next to each other. The game ends when one player pushes the other player's checkers off the last row. In the final battle on the last row, the losing player always makes the first move.</span>
             </div>
         </div>
+        <!-- Кнопка "Вправо" (переход на страницу 2) -->
+        <img src="assets/images/Button_turn_right.png" alt="Вправо" class="info-arrow-btn info-arrow-right" id="btn-info-right">
+        <!-- Кнопка "В меню" на странице 1 -->
+        <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-1">
+    </div>
+
+    <!-- Страница 2 -->
+    <div class="info-page hidden" id="info-page-2">
+        <div class="info-version" id="game-version-info-2"></div>
+        <div class="info-text">
+            <div class="info-text-content">
+                <span class="info-text-ru-2">*ИГРОВАЯ МЕХАНИКА:*<br>
+                Коснитесь пальцем одной из ваших шашек и проведите в противоположную от шашек противника сторону, не отпуская пальца. Отпустив палец, вы произведете удар. Чем дальше отведёте палец, тем сильнее будет удар. Ориентируйтесь на красную стрелку - она показывает направление удара.<br><br>
+                *ОСОБЕННОСТИ:*<br>
+                Вы можете двигать игровое поле влево и вправо, чтобы выбрать наилучшую позицию для нанесения удара шашкой, которая располагается близко к правой или левой границе экрана.</span>
+                <span class="info-text-en-2 hidden">*GAME MECHANICS:*<br>
+                Touch one of your checkers with your finger and swipe it in the direction opposite to the opponent's checkers without lifting your finger. Releasing your finger will perform a strike. The farther you pull your finger, the stronger the strike. Use the red arrow as a guide—it shows the direction of the strike.<br><br>
+                *FEATURES:*<br>
+                You can move the game board left and right to choose the best position to strike with a checker located near the right or left edge of the screen.</span>
+            </div>
+        </div>
+        <!-- Кнопка "Влево" (переход на страницу 1) -->
+        <img src="assets/images/Button_turn_left.png" alt="Влево" class="info-arrow-btn info-arrow-left" id="btn-info-left">
+        <!-- Кнопка "В меню" на странице 2 -->
+        <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-2">
+    </div>
+</div>
 
         <!-- ====== ЭКРАН СТАТИСТИКИ ====== -->
         <div id="screen_score" class="screen">
@@ -785,9 +760,8 @@
                         <span class="stat-value" id="stat-white-percent">0%</span>
                     </div>
                 </div>
-                <!-- КНОПКА ПЕРЕНЕСЕНА ВНУТРЬ .score-content -->
-                <img src="assets/images/Button_to_menu_1.png" alt="В меню" class="score-menu-btn" id="btn-score-to-menu">
             </div>
+            <img src="assets/images/Button_to_menu_1.png" alt="В меню" class="score-menu-btn" id="btn-score-to-menu">
         </div>
     </div>
 
@@ -1283,7 +1257,7 @@
         }
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.0.1a";
+        const GAME_VERSION = "1.0.0b";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
