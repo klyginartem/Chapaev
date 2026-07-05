@@ -531,49 +531,51 @@
             top: 48%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 900px;
+            width: 75%; /* было 900px — теперь адаптивно */
+            max-width: 900px;
             text-align: center;
         }
 
         .stats-list {
-            padding: 40px;
-            margin-bottom: 50px;
+            padding: 30px; /* было 40px — чуть меньше */
+            margin-bottom: 40px; /* было 50px — чуть меньше */
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            padding: 30px 20px;
+            padding: 20px 15px; /* было 30px 20px — чуть меньше */
         }
 
         .stat-label {
-            font-size: 50px;
+            font-size: 40px; /* было 50px — уменьшили */
             color: #444444;
             text-shadow: none;
         }
 
         .stat-value {
-            font-size: 50px;
+            font-size: 40px; /* было 50px — уменьшили */
             font-weight: bold;
             color: #ff0000;
             text-shadow: none;
         }
 
         .score-menu-btn {
-            width: 500px;
+            width: 70%; /* было 500px — теперь адаптивно */
+            max-width: 500px;
             height: auto;
             cursor: pointer;
             transition: transform 0.2s;
             position: absolute;
-            bottom: 300px;
+            bottom: 280px; /* было 300px — чуть выше */
             left: 50%;
             transform: translateX(-50%);
         }
 
-        .score-menu-btn:active {
-            transform: translateX(-50%) scale(0.95);
-        }
+            .score-menu-btn:active {
+                transform: translateX(-50%) scale(0.95);
+            }
 
         .lang-buttons {
             display: flex;
@@ -597,6 +599,7 @@
             display: none;
         }
         @media (max-width: 768px) {
+            /* ===== Форма информации ===== */
             .info-text {
                 font-size: 26px !important;
             }
@@ -604,6 +607,18 @@
             .info-version {
                 font-size: 24px !important;
             }
+
+            /* ===== Форма статистики ===== */
+            .stat-label,
+            .stat-value {
+                font-size: 28px !important; /* дополнительно уменьшаем на мобильных */
+            }
+
+            .score-menu-btn {
+                width: 80% !important; /* чуть шире на мобильных */
+                bottom: 220px !important; /* поднимаем выше */
+            }
+        }
         }
     </style>
 </head>
@@ -1266,7 +1281,7 @@
         }
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.0.0c";
+        const GAME_VERSION = "1.0.0d";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
