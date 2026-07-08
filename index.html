@@ -163,7 +163,7 @@
             max-width: 850px;
             text-align: left;
             font-family: Arial, sans-serif;
-            font-size: 34px;
+            font-size: 55px;
             color: #000000;
             line-height: 1.5;
         }
@@ -295,7 +295,15 @@
             align-items: flex-end;
             gap: 15px;
         }
-
+        .block-class {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 500px; /* ← временно, потом отрегулируешь */
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+        }
         .info-buttons {
             position: absolute;
             left: 50%;
@@ -503,6 +511,12 @@
             display: block;
         }
 
+            .stone.selected {
+                border-radius: 50%;
+                box-shadow: 0 0 0 9px #66ff66, 0 0 15px rgba(102, 255, 102, 0.6);
+                transition: box-shadow 0.2s;
+            }
+
         .aim-line {
             position: absolute;
             pointer-events: none;
@@ -577,6 +591,62 @@
                 transform: translateX(-50%) scale(0.95);
             }
 
+        /* ========== МОДАЛЬНОЕ ОКНО СОГЛАСИЯ ========== */
+        #agreement-overlay {
+            display: none !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+            #agreement-overlay.active {
+                display: flex !important;
+            }
+
+        .agreement-modal {
+            background: url('assets/images/Form_agreemment.png') no-repeat center center;
+            background-size: cover;
+            width: 100%;
+            max-width: 900px;
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .agreement-text {
+            font-size: 80px;
+            font-weight: bold;
+            color: #000000;
+            line-height: 1.4;
+            margin-bottom: 40px;
+        }
+
+        .agreement-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .agreement-btn {
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 400px;
+            height: auto;
+            display: block;
+        }
+
+            .agreement-btn:active {
+                transform: scale(0.9);
+            }
+
         .lang-buttons {
             display: flex;
             gap: 10px;
@@ -601,19 +671,36 @@
         @media (max-width: 768px) {
             /* ===== Форма информации ===== */
             .info-text {
-                font-size: 26px !important;
+                font-size: 32px;
             }
 
             .info-version {
-                font-size: 24px !important;
+                font-size: 32px;
             }
 
             /* ===== Форма статистики ===== */
             .stat-label,
             .stat-value {
-                font-size: 28px !important; /* дополнительно уменьшаем на мобильных */
+                font-size: 40px; /* дополнительно уменьшаем на мобильных */
+            }
+            /* ===== Модальное окно согласия ===== */
+            .agreement-text {
+                font-size: 40px;
+                margin-bottom: 30px;
             }
 
+            .agreement-btn {
+                width: 350px;
+            }
+
+            .agreement-buttons {
+                gap: 15px;
+            }
+
+            .agreement-modal {
+                width: 90% !important;
+                padding: 40px 20px;
+            }
         }
         }
     </style>
@@ -629,6 +716,20 @@
         </div>
 
         <div id="screen_settings" class="screen">
+            <!-- Блок выбора класса игры -->
+            <div class="block-class">
+                <img src="assets/images/Button_left_0_1.png" alt="Влево" class="arrow-btn" id="btn-class-left">
+                <div class="choice-group" id="class-group">
+                    <img src="assets/images/Button_choose_class_1.png" alt="Класс 1" id="class-1" class="choice-image">
+                    <img src="assets/images/Button_choose_class_2.png" alt="Класс 2" id="class-2" class="choice-image hidden">
+                    <!-- Классы 3-5 пока закомментированы
+                <img src="assets/images/Button_choose_class_3.png" alt="Класс 3" id="class-3" class="choice-image hidden">
+                <img src="assets/images/Button_choose_class_4.png" alt="Класс 4" id="class-4" class="choice-image hidden">
+                <img src="assets/images/Button_choose_class_5.png" alt="Класс 5" id="class-5" class="choice-image hidden">
+                -->
+                </div>
+                <img src="assets/images/Button_right_0_2.png" alt="Вправо" class="arrow-btn" id="btn-class-right">
+            </div>
             <div class="block-field">
                 <img src="assets/images/Button_left_1_1.png" alt="Влево" class="arrow-btn" id="btn-field-left">
                 <div class="choice-group" id="field-group">
@@ -726,45 +827,69 @@
 
         <!-- ====== ЭКРАН ИНФОРМАЦИИ ====== -->
 
-<div id="screen_info" class="screen">
-    <!-- Страница 1 -->
-    <div class="info-page" id="info-page-1">
-        <div class="info-version" id="game-version-info"></div>
-        <div class="info-text">
-            <div class="info-text-content">
-                <span class="info-text-ru">*ЦЕЛЬ ИГРЫ:*<br>
-                Выбейте все шашки противника с игрового поля. Игроки по очереди наносят удары. Очередность первого хода определяется настройками игры. Проигравший раунд всегда начинает первым. Игрок, выбивший все шашки соперника, перемещает свои шашки на одну линию вперед. Проигравший игрок отступает на одну линию назад, если до этого его шашки продвигались вперед. Постепенно шашки противников сближаются настолько, что оказываются рядом друг с другом. Игра заканчивается, когда один игрок вытолкнет шашки другого игрока с последней линии. В решающей битве на последней линии первый ход всегда делает проигрывающий игрок.</span>
-                <span class="info-text-en hidden">*GAME OBJECTIVE:*<br>
-                Knock all of the opponent's checkers off the board. Players take turns making moves. The order of the first move is determined by the game settings. The player who loses a round always goes first. The player who knocks all of the opponent's checkers moves their own checkers one row forward. The losing player moves back one row if their checkers had previously advanced. Gradually, the opponents' checkers come closer until they are next to each other. The game ends when one player pushes the other player's checkers off the last row. In the final battle on the last row, the losing player always makes the first move.</span>
+        <div id="screen_info" class="screen">
+            <!-- Страница 1 -->
+            <div class="info-page" id="info-page-1">
+                <div class="info-version" id="game-version-info"></div>
+                <div class="info-text">
+                    <div class="info-text-content">
+                        <span class="info-text-ru">
+                            *ЦЕЛЬ ИГРЫ:*<br>
+                            Выбейте все шашки противника с игрового поля. Игроки по очереди наносят удары. Очередность первого хода определяется настройками игры. Проигравший раунд всегда начинает первым. Игрок, выбивший все шашки соперника, перемещает свои шашки на одну линию вперед. Проигравший игрок отступает на одну линию назад, если до этого его шашки продвигались вперед. Постепенно шашки противников сближаются настолько, что оказываются рядом друг с другом. Игра заканчивается, когда один игрок вытолкнет шашки другого игрока с последней линии. В решающей битве на последней линии первый ход всегда делает проигрывающий игрок.<br>
+                            <br>
+                            *ВЫБОР КЛАССА ИГРЫ:*<br>
+                            В игре доступны два класса, которые отличаются уровнем сложности:<br>
+                                                        <b>Классический</b> — при захвате шашки отображается стрелка, показывающая направление и силу удара.<br>
+                            Идеальный выбор для новичков и тех, кто хочет видеть все параметры своего хода.<br>
+                                                        <b>Классический PRO</b> — стрелка силы и направления удара <b>не отображается</b>.<br>
+                            Вам предстоит полагаться только на свою интуицию, опыт и точность расчёта.<br>
+                            Режим для настоящих профессионалов!
+                        </span>
+                        <span class="info-text-en hidden">
+                            *GAME OBJECTIVE:*<br>
+                            Knock all of the opponent's checkers off the board. Players take turns making moves. The order of the first move is determined by the game settings. The player who loses a round always goes first. The player who knocks all of the opponent's checkers moves their own checkers one row forward. The losing player moves back one row if their checkers had previously advanced. Gradually, the opponents' checkers come closer until they are next to each other. The game ends when one player pushes the other player's checkers off the last row. In the final battle on the last row, the losing player always makes the first move.<br>
+                            <br>
+                            *GAME CLASS SELECTION:*<br>
+                            Two game classes are available, differing in difficulty level:<br>
+                                                        <b>Classic</b> — when you grab a checker, an arrow is displayed, showing the direction and power of your strike.<br>
+                            An ideal choice for beginners and those who want to see all the parameters of their move.<br>
+                                                        <b>Classic PRO</b> — the arrow showing power and direction is <b>not displayed</b>.<br>
+                            You will have to rely solely on your intuition, experience, and precision.<br>
+                            A mode for true professionals!
+                        </span>
+                    </div>
+                </div>
+                <!-- Кнопка "Вправо" (переход на страницу 2) -->
+                <img src="assets/images/Button_turn_right.png" alt="Вправо" class="info-arrow-btn info-arrow-right" id="btn-info-right">
+                <!-- Кнопка "В меню" на странице 1 -->
+                <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-1">
             </div>
-        </div>
-        <!-- Кнопка "Вправо" (переход на страницу 2) -->
-        <img src="assets/images/Button_turn_right.png" alt="Вправо" class="info-arrow-btn info-arrow-right" id="btn-info-right">
-        <!-- Кнопка "В меню" на странице 1 -->
-        <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-1">
-    </div>
 
-    <!-- Страница 2 -->
-    <div class="info-page hidden" id="info-page-2">
-        <div class="info-version" id="game-version-info-2"></div>
-        <div class="info-text">
-            <div class="info-text-content">
-                <span class="info-text-ru-2">*ИГРОВАЯ МЕХАНИКА:*<br>
-                Коснитесь пальцем одной из ваших шашек и проведите в противоположную от шашек противника сторону, не отпуская пальца. Отпустив палец, вы произведете удар. Чем дальше отведёте палец, тем сильнее будет удар. Ориентируйтесь на красную стрелку - она показывает направление удара.<br><br>
-                *ОСОБЕННОСТИ:*<br>
-                Вы можете двигать игровое поле влево и вправо, чтобы выбрать наилучшую позицию для нанесения удара шашкой, которая располагается близко к правой или левой границе экрана.</span>
-                <span class="info-text-en-2 hidden">*GAME MECHANICS:*<br>
-                Touch one of your checkers with your finger and swipe it in the direction opposite to the opponent's checkers without lifting your finger. Releasing your finger will perform a strike. The farther you pull your finger, the stronger the strike. Use the red arrow as a guide—it shows the direction of the strike.<br><br>
-                *FEATURES:*<br>
-                You can move the game board left and right to choose the best position to strike with a checker located near the right or left edge of the screen.</span>
+            <!-- Страница 2 -->
+            <div class="info-page hidden" id="info-page-2">
+                <div class="info-version" id="game-version-info-2"></div>
+                <div class="info-text">
+                    <div class="info-text-content">
+                        <span class="info-text-ru-2">
+                            *ИГРОВАЯ МЕХАНИКА:*<br>
+                            Коснитесь пальцем одной из ваших шашек и проведите в противоположную от шашек противника сторону, не отпуская пальца. Отпустив палец, вы произведете удар. Чем дальше отведёте палец, тем сильнее будет удар. Ориентируйтесь на красную стрелку - она показывает направление удара.<br><br>
+                            *ОСОБЕННОСТИ:*<br>
+                            Вы можете двигать игровое поле влево и вправо, чтобы выбрать наилучшую позицию для нанесения удара шашкой, которая располагается близко к правой или левой границе экрана.
+                        </span>
+                        <span class="info-text-en-2 hidden">
+                            *GAME MECHANICS:*<br>
+                            Touch one of your checkers with your finger and swipe it in the direction opposite to the opponent's checkers without lifting your finger. Releasing your finger will perform a strike. The farther you pull your finger, the stronger the strike. Use the red arrow as a guide—it shows the direction of the strike.<br><br>
+                            *FEATURES:*<br>
+                            You can move the game board left and right to choose the best position to strike with a checker located near the right or left edge of the screen.
+                        </span>
+                    </div>
+                </div>
+                <!-- Кнопка "Влево" (переход на страницу 1) -->
+                <img src="assets/images/Button_turn_left.png" alt="Влево" class="info-arrow-btn info-arrow-left" id="btn-info-left">
+                <!-- Кнопка "В меню" на странице 2 -->
+                <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-2">
             </div>
         </div>
-        <!-- Кнопка "Влево" (переход на страницу 1) -->
-        <img src="assets/images/Button_turn_left.png" alt="Влево" class="info-arrow-btn info-arrow-left" id="btn-info-left">
-        <!-- Кнопка "В меню" на странице 2 -->
-        <img src="assets/images/Button_to_menu_4.png" alt="В меню" class="final-btn" id="btn-info-to-menu-2">
-    </div>
-</div>
 
         <!-- ====== ЭКРАН СТАТИСТИКИ ====== -->
         <div id="screen_score" class="screen">
@@ -794,6 +919,19 @@
             </div>
             <img src="assets/images/Button_to_menu_1.png" alt="В меню" class="score-menu-btn" id="btn-score-to-menu">
         </div>
+        <!-- ====== МОДАЛЬНОЕ ОКНО СОГЛАСИЯ ====== -->
+        <div id="agreement-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
+            <div class="agreement-modal">
+                <div class="agreement-text" id="agreement-text">
+                    <!-- Текст будет вставлен через JavaScript -->
+                </div>
+                <div class="agreement-buttons">
+                    <img src="assets/images/Button_Agree_Form_agreemment.png" alt="Согласен" class="agreement-btn" id="btn-agree">
+                    <img src="assets/images/Button_Cancel_Form_agreemment.png" alt="Отмена" class="agreement-btn" id="btn-cancel">
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ПРАВИЛЬНОЕ ПОДКЛЮЧЕНИЕ VK BRIDGE -->
@@ -1288,7 +1426,7 @@
         }
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.0.2";
+        const GAME_VERSION = "1.1.0";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
@@ -1421,6 +1559,76 @@ function setGameVersions() {
         let soundIndex = 0;
         const soundImages = ['sound-on', 'sound-off'];
 
+        // ========== ПЕРЕКЛЮЧАТЕЛЬ КЛАССА ==========
+        let classIndex = 0; // 0 или 1
+        const classImages = ['class-1', 'class-2']; // пока только 2 класса
+        // const classImages = ['class-1', 'class-2', 'class-3', 'class-4', 'class-5']; // полный список (закомментирован)
+
+        // ========== ДАННЫЕ ДЛЯ ФОРМЫ СОГЛАСИЯ ==========
+        const CLASS_DATA = {
+            0: { // Класс 1 (индекс 0)
+                ru: { name: 'Классический', needAd: false },
+                en: { name: 'Classic', needAd: false }
+            },
+            1: { // Класс 2 (индекс 1)
+                ru: { name: 'Классический PRO', needAd: true },
+                en: { name: 'Classic PRO', needAd: true }
+            },
+            2: { // Класс 3 (индекс 2)
+                ru: { name: 'Битва на болотах', needAd: true },
+                en: { name: 'The Swamps', needAd: true }
+            },
+            3: { // Класс 4 (индекс 3)
+                ru: { name: 'Беспорядок', needAd: true },
+                en: { name: 'Mess', needAd: true }
+            },
+            4: { // Класс 5 (индекс 4)
+                ru: { name: 'Последний удар', needAd: true },
+                en: { name: 'The Last Hit', needAd: true }
+            }
+        };
+
+        // ========== ПОЛУЧЕНИЕ ТЕКСТА ДЛЯ ФОРМЫ СОГЛАСИЯ ==========
+        function getAgreementText() {
+            // Проверяем, какая кнопка языка сейчас скрыта
+            const isEnglish = document.getElementById('btn-lang-ru').classList.contains('hidden');
+            const lang = isEnglish ? 'en' : 'ru';
+            const classData = CLASS_DATA[classIndex];
+
+            if (!classData) {
+                return lang === 'en' ? 'Watch a short ad to access this mode.' : 'Посмотрите рекламный ролик для доступа к этому режиму.';
+            }
+
+            const className = classData[lang].name;
+
+            if (lang === 'ru') {
+                return `Чтобы получить доступ к режиму "${className}", посмотрите рекламный ролик.`;
+            } else {
+                return `To access "${className}" mode, watch a short ad.`;
+            }
+        }
+
+        function updateClass() {
+            classImages.forEach((id, idx) => {
+                const img = document.getElementById(id);
+                if (img) {
+                    if (idx === classIndex) img.classList.remove('hidden');
+                    else img.classList.add('hidden');
+                }
+            });
+            playSound('TurnSwitchSound.mp3');
+        }
+
+        document.getElementById('btn-class-left').addEventListener('click', () => {
+            classIndex = (classIndex - 1 + classImages.length) % classImages.length;
+            updateClass();
+        });
+
+        document.getElementById('btn-class-right').addEventListener('click', () => {
+            classIndex = (classIndex + 1) % classImages.length;
+            updateClass();
+        });
+
         function updateSound() {
             soundImages.forEach((id, idx) => {
                 const img = document.getElementById(id);
@@ -1457,6 +1665,7 @@ function setGameVersions() {
         let currentScale = 1;
         let isGameActive = false;
         let isComputerMode = false;
+        let isMasterMode = false; // true — режим "Высший класс" (без стрелки)
         let computerDifficulty = 'hard';
 
         let redLines = 0;
@@ -1846,6 +2055,79 @@ function setGameVersions() {
             }
             isPhysicsRunning = false;
             isGameActive = false;
+        }
+
+        // ========== ФУНКЦИИ МОДАЛЬНОГО ОКНА ==========
+        function showAgreementForm() {
+            const textElement = document.getElementById('agreement-text');
+            if (textElement) {
+                textElement.textContent = getAgreementText();
+            }
+            document.getElementById('agreement-overlay').classList.add('active');
+        }
+
+        function hideAgreementForm() {
+            document.getElementById('agreement-overlay').classList.remove('active');
+        }
+
+        // ========== РЕКЛАМА ЗА ВОЗНАГРАЖДЕНИЕ ==========
+        function watchRewardAd() {
+            console.log('🎬 Запрос рекламы за вознаграждение...');
+
+            // Показываем сообщение о загрузке
+            const textElement = document.getElementById('agreement-text');
+            if (textElement) {
+                const originalText = textElement.textContent;
+                textElement.textContent = '⏳ Загрузка рекламы...';
+                // Можно вернуть текст через 5 секунд, если что-то пошло не так
+                setTimeout(() => {
+                    if (textElement.textContent === '⏳ Загрузка рекламы...') {
+                        textElement.textContent = originalText;
+                    }
+                }, 5000);
+            }
+
+            // Проверяем, доступен ли VK Bridge
+            if (typeof vkBridge === 'undefined' || !vkBridge || !isVKBridgeReady) {
+                console.warn('⚠️ VK Bridge не доступен, запускаем без рекламы (тестовый режим)');
+                // В тестовом режиме просто запускаем игру
+                startGame();
+                return;
+            }
+
+            // Шаг 1: Проверяем, есть ли реклама для показа
+            vkBridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+                .then((data) => {
+                    console.log('📊 Проверка рекламы:', data);
+
+                    if (data.result) {
+                        // Шаг 2: Реклама есть — показываем её
+                        console.log('📺 Показ рекламы...');
+                        return vkBridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' });
+                    } else {
+                        console.log('⚠️ Рекламные материалы не найдены');
+                        // Реклама не готова — запускаем игру без рекламы (или показываем сообщение)
+                        alert('Реклама временно недоступна, попробуйте позже.');
+                        return null;
+                    }
+                })
+                .then((result) => {
+                    if (result && result.result) {
+                        console.log('✅ Реклама просмотрена! Запускаем игру.');
+                        // Реклама успешно показана — запускаем игру
+                        startGame();
+                    } else if (result === null) {
+                        // Уже обработано выше
+                    } else {
+                        console.log('❌ Реклама не была показана');
+                        alert('Реклама не была показана, попробуйте ещё раз.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('❌ Ошибка при работе с рекламой:', error);
+                    // Если ошибка — всё равно запускаем игру (или показываем сообщение)
+                    alert('Произошла ошибка при загрузке рекламы. Попробуйте позже.');
+                });
         }
 
         // ========== ЛЁГКИЙ ХОД КОМПЬЮТЕРА ==========
@@ -2287,6 +2569,12 @@ function setGameVersions() {
         let currentStone = null;
 
         function createAimLine(x, y, angle, length, stoneWidth) {
+
+            if (isMasterMode) {
+                // В режиме "Высший класс" — не показываем стрелку
+                return;
+            }
+
             if (aimLine) aimLine.remove();
             const container = document.getElementById('game-board-container');
             if (!container) return;
@@ -2366,6 +2654,9 @@ function setGameVersions() {
             }
 
             console.log('  ✅ Захват разрешён, начинаем перетаскивание');
+
+            stoneElement.classList.add('selected');
+
             isDragging = true;
             selectedStone = stoneElement;
             currentStone = stoneElement;
@@ -2379,6 +2670,12 @@ function setGameVersions() {
         function onGlobalMouseMove(event) {
             if (!isGameActive) return;
             if (!isDragging || !selectedStone) return;
+
+            // В режиме "Высший класс" — не обновляем стрелку
+            if (isMasterMode) {
+                return;
+            }
+
             event.preventDefault();
             const containerRect = document.getElementById('game-board-container').getBoundingClientRect();
             let clientX, clientY;
@@ -2415,6 +2712,11 @@ function setGameVersions() {
                 return;
             }
             event.preventDefault();
+
+            // Убираем обводку со всех шашек
+            document.querySelectorAll('.stone.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
 
             const stoneTeam = selectedStone.dataset.team;
             if ((turnFlag === 1 && stoneTeam !== 'red') || (turnFlag === 0 && stoneTeam !== 'white')) {
@@ -2473,6 +2775,12 @@ function setGameVersions() {
                     updateTurnIndicator();
                 }
             }
+
+            // Убираем обводку со всех шашек
+            document.querySelectorAll('.stone.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+
             removeAimLine();
             isDragging = false;
             selectedStone = null;
@@ -2541,6 +2849,29 @@ function setGameVersions() {
         document.getElementById('btn-to-fight').addEventListener('click', async () => {
             playSound('OpenNewFormSound.mp3');
 
+            // Определяем класс игры
+            isMasterMode = (classIndex === 1); // класс 2 (индекс 1) — Высший класс
+            console.log(`Класс игры: ${isMasterMode ? 'Высший класс (без стрелки)' : 'Стандарт'}`);
+            console.log('classIndex =', classIndex);
+
+            // Если выбран класс, требующий рекламу (класс 2 и выше)
+            const classData = CLASS_DATA[classIndex];
+            console.log('classData =', classData);
+
+            if (classData && classData.ru.needAd) {
+                console.log('✅ Показываем модальное окно согласия');
+                showAgreementForm();
+                return;
+            }
+
+            // Для класса 1 (Классический) — запускаем игру сразу
+            startGame();
+        });
+
+        // ========== ЗАПУСК ИГРЫ ==========
+        async function startGame() {
+            console.log('🚀 Запуск игры...');
+
             isComputerMode = (fieldIndex === 1 || fieldIndex === 2);
             computerDifficulty = fieldIndex === 1 ? 'easy' : (fieldIndex === 2 ? 'hard' : 'hard');
             console.log(`Режим игры: ${isComputerMode ? 'Против компьютера' : 'Два игрока'}, Сложность: ${computerDifficulty}`);
@@ -2584,7 +2915,7 @@ function setGameVersions() {
                     }
                 }, 500);
             }
-        });
+        }
 
         document.getElementById('btn-resume').addEventListener('click', () => {
             playSound('OpenNewFormSound.mp3');
@@ -2667,6 +2998,22 @@ document.getElementById('btn-info-to-menu-2').addEventListener('click', async ()
             playSound('OpenNewFormSound.mp3');
             stopPhysics();
             await showBannerAd();
+            switchScreen('screen_settings');
+        });
+
+        // ========== ОБРАБОТЧИКИ МОДАЛЬНОГО ОКНА ==========
+        // Кнопка "Согласен"
+        document.getElementById('btn-agree').addEventListener('click', () => {
+            playSound('OpenNewFormSound.mp3');
+            hideAgreementForm();
+            // Показываем рекламу за вознаграждение
+            watchRewardAd();
+        });
+
+        // Кнопка "Отмена"
+        document.getElementById('btn-cancel').addEventListener('click', () => {
+            playSound('OpenNewFormSound.mp3');
+            hideAgreementForm();
             switchScreen('screen_settings');
         });
 
@@ -2851,6 +3198,26 @@ if (versionInfo2) {
                     infoTextRu2.classList.remove('hidden');
                     infoTextEn2.classList.add('hidden');
                 }
+            }
+            // ===== Переключение языка для классов =====
+            const classImages = ['class-1', 'class-2']; // пока только 2
+            classImages.forEach((id, idx) => {
+                const img = document.getElementById(id);
+                if (img) {
+                    const num = idx + 1;
+                    img.src = `assets/images/Button_choose_class_${num}${isEnglish ? '_EN' : ''}.png`;
+                }
+            });
+            // ===== Переключение языка для формы согласия =====
+            const agreeBtn = document.getElementById('btn-agree');
+            const cancelBtn = document.getElementById('btn-cancel');
+            if (agreeBtn) {
+                agreeBtn.src = `assets/images/Button_Agree_Form_agreemment${isEnglish ? '_EN' : ''}.png`;
+                console.log('Кнопка "Согласен" обновлена:', agreeBtn.src);
+            }
+            if (cancelBtn) {
+                cancelBtn.src = `assets/images/Button_Cancel_Form_agreemment${isEnglish ? '_EN' : ''}.png`;
+                console.log('Кнопка "Отмена" обновлена:', cancelBtn.src);
             }
         }
 
