@@ -752,6 +752,57 @@
                 padding: 40px 20px;
             }
         }
+        /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+@media (max-width: 800px) {
+    .stats-container {
+        top: 350px;
+        width: 94%;
+        padding: 10px 12px;
+        font-size: 35px;
+        max-height: 55vh;
+    }
+    .stats-class { font-size: 35px; margin-top: 8px; margin-bottom: 8px; }
+    .stats-mode { font-size: 35px; padding: 3px 10px; }
+    .stats-row { font-size: 22px; padding: 3px 0; }
+    .stats-value-total { font-size: 35px; min-width: 40px; }
+    .stats-value-red { font-size: 35px; min-width: 70px; }
+    .stats-value-white { font-size: 35px; min-width: 70px; }
+    .stats-header-row { font-size: 35px; padding: 5px 0; }
+    .stats-empty { font-size: 20px; padding: 15px; }
+    .score-menu-btn { width: 60%; max-width: 350px; bottom: 200px; }
+}
+
+@media (max-width: 480px) {
+    .stats-container {
+        top: 300px;
+        width: 96%;
+        padding: 8px 8px;
+        font-size: 20px;
+        max-height: 50vh;
+    }
+    .stats-class { font-size: 20px; margin-top: 6px; margin-bottom: 6px; }
+    .stats-mode { font-size: 18px; padding: 2px 8px; margin-top: 4px; }
+    .stats-row { font-size: 13px; padding: 2px 0; }
+    .stats-value-total { font-size: 18px; min-width: 30px; }
+    .stats-value-red { font-size: 18px; min-width: 55px; }
+    .stats-value-white { font-size: 18px; min-width: 55px; }
+    .stats-header-row { font-size: 18px; padding: 4px 0; border-bottom-width: 3px; }
+    .stats-divider { margin: 5px 0; }
+    .stats-empty { font-size: 16px; padding: 12px; }
+    .score-menu-btn { width: 55%; max-width: 280px; bottom: 160px; }
+}
+
+@media (max-width: 400px) {
+    .stats-container { top: 270px; max-height: 45vh; }
+    .stats-class { font-size: 17px; }
+    .stats-mode { font-size: 15px; }
+    .stats-row { font-size: 11px; padding: 1px 0; }
+    .stats-value-total { font-size: 15px; min-width: 25px; }
+    .stats-value-red { font-size: 15px; min-width: 45px; }
+    .stats-value-white { font-size: 15px; min-width: 45px; }
+    .stats-header-row { font-size: 15px; padding: 3px 0; }
+    .score-menu-btn { width: 50%; max-width: 220px; bottom: 140px; }
+}
         }
     </style>
 </head>
@@ -1574,7 +1625,7 @@
         });
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.1.1";
+        const GAME_VERSION = "1.1.2";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
