@@ -539,50 +539,105 @@
             transform: translateX(-50%) scale(0.9);
         }
 
-        /* ========== ЭКРАН СТАТИСТИКИ ========== */
-        .score-content {
+        /* ========== СТАТИСТИКА ========== */
+        #screen_score {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .stats-container {
             position: absolute;
-            top: 48%;
+            top: 450px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 75%; /* было 900px — теперь адаптивно */
+            transform: translateX(-50%);
+            width: 90%;
             max-width: 900px;
+            font-size: 45px;
             text-align: center;
+            padding: 15px 20px;
+         
+            
         }
-
-        .stats-list {
-            padding: 30px; /* было 40px — чуть меньше */
-            margin-bottom: 40px; /* было 50px — чуть меньше */
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 20px 15px; /* было 30px 20px — чуть меньше */
-        }
-
-        .stat-label {
-            font-size: 40px; /* было 50px — уменьшили */
-            color: #444444;
-            text-shadow: none;
-        }
-
-        .stat-value {
-            font-size: 40px; /* было 50px — уменьшили */
+        .stats-class {
+            font-size: 45px;
             font-weight: bold;
-            color: #ff0000;
-            text-shadow: none;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            color: #ff4444;
         }
 
+        .stats-mode {
+            font-size: 45px;
+            font-weight: bold;
+            color: #000000;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            /* ФОН */
+            background: rgba(100, 100, 100, 0.2);
+            padding: 8px 15px;
+            border-radius: 8px;
+            /* display: inline-block; /* чтобы фон был только под текстом */
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0;
+            font-size: 26px;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stats-value-total {
+            font-weight: bold;
+            color: #000000;
+            font-size: 40px;
+        }
+
+        .stats-value-red {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 40px;
+        }
+
+        .stats-value-white {
+            color: #000000;
+            font-weight: bold;
+            font-size: 40px;
+        }
+
+        .stats-header-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            font-size: 45px;
+            font-weight: bold;
+            color: #000000;
+            border-bottom: 4px solid #000000;
+            margin-bottom: 10px;
+        }
+
+        .stats-divider {
+            border: 2px solid #000000;
+            margin: 10px 0;
+        }
+
+        .stats-empty {
+            font-size: 30px;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        /* ========== КНОПКА "В МЕНЮ" НА ФОРМЕ СТАТИСТИКИ ========== */
         .score-menu-btn {
-            width: 70%; /* было 500px — теперь адаптивно */
+            width: 70%;
             max-width: 500px;
             height: auto;
             cursor: pointer;
             transition: transform 0.2s;
             position: absolute;
-            bottom: 300px; /* было 300px — чуть выше */
+            bottom: 300px;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -671,18 +726,13 @@
         @media (max-width: 768px) {
             /* ===== Форма информации ===== */
             .info-text {
-                font-size: 25px;
+                font-size: 33px;
             }
 
             .info-version {
-                font-size: 25px;
+                font-size: 33px;
             }
 
-            /* ===== Форма статистики ===== */
-            .stat-label,
-            .stat-value {
-                font-size: 40px; /* дополнительно уменьшаем на мобильных */
-            }
             /* ===== Модальное окно согласия ===== */
             .agreement-text {
                 font-size: 40px;
@@ -839,9 +889,9 @@
                             <br>
                             *ВЫБОР КЛАССА ИГРЫ:*<br>
                             В игре доступны два класса, которые отличаются уровнем сложности:<br>
-                                                        <b>Классический</b> — при захвате шашки отображается стрелка, показывающая направление и силу удара.<br>
+                            <b>Классический</b> — при захвате шашки отображается стрелка, показывающая направление и силу удара.<br>
                             Идеальный выбор для новичков и тех, кто хочет видеть все параметры своего хода.<br>
-                            
+
                         </span>
                         <span class="info-text-en hidden">
                             *GAME OBJECTIVE:*<br>
@@ -849,9 +899,9 @@
                             <br>
                             *GAME CLASS SELECTION:*<br>
                             Two game classes are available, differing in difficulty level:<br>
-                                                        <b>Classic</b> — when you grab a checker, an arrow is displayed, showing the direction and power of your strike.<br>
+                            <b>Classic</b> — when you grab a checker, an arrow is displayed, showing the direction and power of your strike.<br>
                             An ideal choice for beginners and those who want to see all the parameters of their move.<br>
-                                                        
+
                         </span>
                     </div>
                 </div>
@@ -897,32 +947,21 @@
 
         <!-- ====== ЭКРАН СТАТИСТИКИ ====== -->
         <div id="screen_score" class="screen">
-            <div class="score-content">
-                <div class="stats-list">
-                    <div class="stat-row">
-                        <span class="stat-label">Всего игр</span>
-                        <span class="stat-value" id="stat-total">0</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Побед красных</span>
-                        <span class="stat-value" id="stat-wins">0</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Побед белых</span>
-                        <span class="stat-value" id="stat-losses">0</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Процент побед красных</span>
-                        <span class="stat-value" id="stat-percent">0%</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Процент побед белых</span>
-                        <span class="stat-value" id="stat-white-percent">0%</span>
-                    </div>
+            <!-- Контейнер статистики -->
+            <div class="stats-container" id="stats-container">
+                <!-- Заголовок -->
+                <div class="stats-header-row">
+                    <span>Всего игр</span>
+                    <span>Победы Кр.</span>
+                    <span>Победы Бел.</span>
                 </div>
+                <!-- Динамические данные -->
+                <div id="stats-content"></div>
             </div>
+            <!-- Кнопка "В меню" — НЕ ТРОГАЕМ -->
             <img src="assets/images/Button_to_menu_1.png" alt="В меню" class="score-menu-btn" id="btn-score-to-menu">
         </div>
+
         <!-- ====== МОДАЛЬНОЕ ОКНО СОГЛАСИЯ ====== -->
         <div id="agreement-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
             <div class="agreement-modal">
@@ -1197,7 +1236,7 @@
                 isVKBridgeReady = true;
 
                 setupVKBridgeSubscriptions();
-                await updateStatsDisplay();
+                await renderStats();
                 await showBannerAd();
 
                 return true;
@@ -1355,9 +1394,31 @@
         }
 
         // ========== VK STORAGE / localStorage FALLBACK ==========
-        const STATS_KEY = 'chapaev_stats_vk';
+        // ========================================================================
+        // ========== СТАТИСТИКА С VK STORAGE ==========
+        // ========================================================================
 
-        async function getStats() {
+        const STATS_KEY = 'chapaev_stats_v2';
+
+        // ----- Структура по умолчанию -----
+        function getDefaultStats() {
+            return {
+                'Классический': {
+                    'Два игрока': { total: 0, redWins: 0, whiteWins: 0 },
+                    'С компьютером (легко)': { total: 0, redWins: 0, whiteWins: 0 },
+                    'С компьютером (сложно)': { total: 0, redWins: 0, whiteWins: 0 }
+                },
+                'Классический PRO': {
+                    'Два игрока': { total: 0, redWins: 0, whiteWins: 0 },
+                    'С компьютером (легко)': { total: 0, redWins: 0, whiteWins: 0 },
+                    'С компьютером (сложно)': { total: 0, redWins: 0, whiteWins: 0 }
+                }
+            };
+        }
+
+        // ----- Загрузить с VK Storage или localStorage -----
+        async function loadStats() {
+            // Сначала пробуем загрузить из VK Storage
             if (isInVK && vkBridge && isVKBridgeReady) {
                 try {
                     const response = await vkBridge.send('VKWebAppStorageGet', {
@@ -1366,71 +1427,154 @@
 
                     if (response.keys && response.keys.length > 0 && response.keys[0].value) {
                         const stats = JSON.parse(response.keys[0].value);
+                        // Кэшируем в localStorage
                         localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+                        console.log('✅ Статистика загружена из VK Storage');
                         return stats;
                     }
-                    return { total: 0, wins: 0, losses: 0 };
                 } catch (e) {
-                    console.error('Ошибка загрузки из VK Storage:', e);
+                    console.error('❌ Ошибка загрузки из VK Storage:', e);
                 }
             }
 
+            // Fallback на localStorage
             const saved = localStorage.getItem(STATS_KEY);
-            return saved ? JSON.parse(saved) : { total: 0, wins: 0, losses: 0 };
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error('❌ Ошибка парсинга localStorage:', e);
+                }
+            }
+            
+            return getDefaultStats();
         }
 
+        // ----- Сохранить в VK Storage и localStorage -----
         async function saveStats(stats) {
+            // Всегда сохраняем в localStorage как резерв
             localStorage.setItem(STATS_KEY, JSON.stringify(stats));
 
+            // Сохраняем в VK Storage, если доступно
             if (isInVK && vkBridge && isVKBridgeReady) {
                 try {
                     await vkBridge.send('VKWebAppStorageSet', {
                         key: STATS_KEY,
                         value: JSON.stringify(stats)
                     });
-                    console.log('Статистика сохранена в VK Storage');
+                    console.log('✅ Статистика сохранена в VK Storage');
                     return;
                 } catch (e) {
-                    console.error('Ошибка сохранения в VK Storage:', e);
+                    console.error('❌ Ошибка сохранения в VK Storage:', e);
                 }
             }
 
-            console.log('Статистика сохранена в localStorage');
+            console.log('📦 Статистика сохранена в localStorage (VK Storage недоступен)');
         }
 
-        async function addGameResult(isWin) {
-            const stats = await getStats();
-            stats.total++;
-            if (isWin) {
-                stats.wins++;
+        // ----- Обновить статистику -----
+        async function updateStats(className, modeName, isRedWin) {
+            const stats = await loadStats();
+            
+            if (!stats[className]) stats[className] = {};
+            if (!stats[className][modeName]) {
+                stats[className][modeName] = { total: 0, redWins: 0, whiteWins: 0 };
+            }
+            
+            stats[className][modeName].total++;
+            if (isRedWin) {
+                stats[className][modeName].redWins++;
             } else {
-                stats.losses++;
+                stats[className][modeName].whiteWins++;
             }
+            
             await saveStats(stats);
-            await updateStatsDisplay();
         }
 
-        async function updateStatsDisplay() {
-            const stats = await getStats();
-            document.getElementById('stat-total').textContent = stats.total;
-            document.getElementById('stat-wins').textContent = stats.wins;
-            document.getElementById('stat-losses').textContent = stats.losses;
+        // ----- Отобразить статистику -----
+        async function renderStats() {
+            const container = document.getElementById('stats-content');
+            if (!container) return;
+            container.innerHTML = '';
 
-            let redPercent = 0;
-            if (stats.total > 0) {
-                redPercent = Math.round((stats.wins / stats.total) * 100);
-            }
-            document.getElementById('stat-percent').textContent = redPercent + '%';
+            const stats = await loadStats();
+            const classKeys = Object.keys(stats);
 
-            let whitePercent = 0;
-            if (stats.total > 0) {
-                whitePercent = Math.round((stats.losses / stats.total) * 100);
+            if (classKeys.length === 0) {
+                container.innerHTML = '<div class="stats-empty">Нет данных для отображения</div>';
+                return;
             }
-            document.getElementById('stat-white-percent').textContent = whitePercent + '%';
+
+            let isFirstClass = true;
+
+            classKeys.forEach((className) => {
+                if (!isFirstClass) {
+                    const divider = document.createElement('hr');
+                    divider.className = 'stats-divider';
+                    container.appendChild(divider);
+                }
+                isFirstClass = false;
+
+                const classTitle = document.createElement('div');
+                classTitle.className = 'stats-class';
+                classTitle.textContent = ` ★ ${className} ★ `;
+                container.appendChild(classTitle);
+
+                const modes = stats[className];
+                const modeKeys = Object.keys(modes);
+
+                modeKeys.forEach((modeName) => {
+                    const data = modes[modeName];
+
+                    const modeTitle = document.createElement('div');
+                    modeTitle.className = 'stats-mode';
+                    modeTitle.textContent = modeName;
+                    container.appendChild(modeTitle);
+
+                    const row = document.createElement('div');
+                    row.className = 'stats-row';
+
+                    const total = data.total || 0;
+                    const redWins = data.redWins || 0;
+                    const whiteWins = data.whiteWins || 0;
+
+                    const redPercent = total > 0 ? Math.round((redWins / total) * 100) : 0;
+                    const whitePercent = total > 0 ? Math.round((whiteWins / total) * 100) : 0;
+
+                    row.innerHTML = `
+                        <span class="stats-value-total">${total}</span>
+                        <span class="stats-value-red">${redWins} (${redPercent}%)</span>
+                        <span class="stats-value-white">${whiteWins} (${whitePercent}%)</span>
+                    `;
+                    container.appendChild(row);
+                });
+            });
         }
+
+        // ----- Функция addGameResult -----
+        async function addGameResult(isWin, className, modeName) {
+            if (className && modeName) {
+                await updateStats(className, modeName, isWin);
+            }
+        }
+
+        // ----- Обработчик кнопки статистики -----
+        document.getElementById('btn-to-score').addEventListener('click', async function () {
+            playSound('OpenNewFormSound.mp3');
+            await renderStats();
+            switchScreen('screen_score');
+        });
+
+        // ----- Обработчик кнопки "В меню" -----
+        document.getElementById('btn-score-to-menu').addEventListener('click', async function () {
+            playSound('OpenNewFormSound.mp3');
+            stopPhysics();
+            await showBannerAd();
+            switchScreen('screen_settings');
+        });
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.1.0";
+        const GAME_VERSION = "1.1.1";
 
 function setGameVersions() {
     const versionStart = document.getElementById('game-version-start');
@@ -1954,7 +2098,7 @@ function setGameVersions() {
                         currentWhiteY = Math.max(START_WHITE_Y, Math.min(MAX_WHITE_Y, currentWhiteY));
 
                         if (redLines >= 7) {
-                            await addGameResult(true);
+                            await addGameResult(true, window._currentClassName, window._currentModeName);
                             playSound('WinSound.mp3');
                             setTimeout(() => switchScreen('screen_final_win'), 2000);
                             return;
@@ -1991,7 +2135,7 @@ function setGameVersions() {
                         currentWhiteY = Math.max(START_WHITE_Y, Math.min(MAX_WHITE_Y, currentWhiteY));
 
                         if (whiteLines >= 7) {
-                            await addGameResult(false);
+                            await addGameResult(false, window._currentClassName, window._currentModeName);
                             playSound('LoseSound.mp3');
                             setTimeout(() => switchScreen('screen_final_lost'), 2000);
                             return;
@@ -2876,6 +3020,28 @@ function setGameVersions() {
         async function startGame() {
             console.log('🚀 Запуск игры...');
 
+            // ========== НОВЫЙ БЛОК ДЛЯ СТАТИСТИКИ ==========
+            let currentClassName = 'Классический';
+            if (classIndex === 1) {
+                currentClassName = 'Классический PRO';
+            }
+
+            let currentModeName = 'Два игрока';
+            if (fieldIndex === 0) {
+                currentModeName = 'Два игрока';
+            } else if (fieldIndex === 1) {
+                currentModeName = 'С компьютером (легко)';
+            } else if (fieldIndex === 2) {
+                currentModeName = 'С компьютером (сложно)';
+            } else if (fieldIndex === 3) {
+                currentModeName = isComputerMode ? 'С компьютером (сложно)' : 'Два игрока';
+            }
+
+            window._currentClassName = currentClassName;
+            window._currentModeName = currentModeName;
+            console.log(`📊 Статистика: класс="${currentClassName}", режим="${currentModeName}"`);
+    // ========== КОНЕЦ НОВОГО БЛОКА ==========
+
             isComputerMode = (fieldIndex === 1 || fieldIndex === 2);
             computerDifficulty = fieldIndex === 1 ? 'easy' : (fieldIndex === 2 ? 'hard' : 'hard');
             console.log(`Режим игры: ${isComputerMode ? 'Против компьютера' : 'Два игрока'}, Сложность: ${computerDifficulty}`);
@@ -3252,7 +3418,7 @@ if (versionInfo2) {
             }
 
             setGameVersions();
-            await updateStatsDisplay();
+            await renderStats();
 
             document.getElementById('btn-lang-ru').classList.remove('hidden');
             document.getElementById('btn-lang-en').classList.add('hidden');
@@ -3280,6 +3446,7 @@ if (versionInfo2) {
                 }
             }
         })();
+      
     </script>
 </body>
 </html>
