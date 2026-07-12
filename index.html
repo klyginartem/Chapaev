@@ -751,13 +751,8 @@
                 width: 90% !important;
                 padding: 40px 20px;
             }
-            /* Адаптация для мобильных нопка возврата в меню */
-            .score-menu-btn {
-                width: 80%;
-                max-width: 350px;
-                bottom: 300px;
-            }
-                /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
+            
+                /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ СТАТИСТИКИ===== */
     
             .stats-container {
                 top: 400px;
@@ -775,7 +770,17 @@
             .stats-header-row { font-size: 35px; padding: 5px 0; }
             .stats-empty { font-size: 20px; padding: 15px; }
             .score-menu-btn { width: 60%; max-width: 350px; bottom: 200px; }
+            
+            /* ===== КНОПКА ВОЗВРАТА ===== */
+            .score-menu-btn {
+                width: 70%;           /* ← ширина 80% от экрана */
+                max-width: 500px;     /* ← максимальная ширина */
+                bottom: 250px;        /* ← отступ от низа (чем меньше, тем ниже) */
+                left: 50%;
+                transform: translateX(-50%);
             }
+        
+        }
         }
     </style>
 </head>
