@@ -170,7 +170,7 @@
             max-width: 950px;
             text-align: left;
             font-family: Arial, sans-serif;
-            font-size: 33px;
+            font-size: 36px;
             color: #000000;
             line-height: 1.5;
             /* ===== НОВЫЙ БЛОК: фон и обводка ===== */
@@ -870,7 +870,15 @@
                 filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 80px rgba(255, 255, 255, 0.3));
             }
 
+        /* ========== ЭКРАН ЗАГРУЗКИ ========== */
+        #splash-screen {
+            transition: opacity 0.5s ease;
+        }
 
+            #splash-screen.hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
 
         @media (max-width: 768px) {
             .info-text {
@@ -970,7 +978,22 @@
     </style>
 </head>
 <body>
+
+    <!-- ===== ЭКРАН ЗАГРУЗКИ ===== -->
+    <div id="splash-screen" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a2e; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+        <div style="text-align: center; color: #fff; font-family: Arial, sans-serif;">
+            <div style="font-size: 80px; margin-bottom: 30px;">⚔️</div>
+            <div style="font-size: 40px; font-weight: bold; margin-bottom: 20px; color: #ff4444;">Чапаев. Последний бой!</div>
+            <div style="font-size: 24px; margin-bottom: 30px; color: #aaa;">Загрузка...</div>
+            <div style="width: 300px; height: 10px; background: #333; border-radius: 10px; overflow: hidden; margin: 0 auto;">
+                <div id="loading-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #ff4444, #ff8888); border-radius: 10px; transition: width 0.3s ease;"></div>
+            </div>
+            <div id="loading-text" style="font-size: 20px; margin-top: 15px; color: #888;">0%</div>
+        </div>
+    </div>
+
     <div id="game-container">
+
         <div id="screen_next" class="screen active">
             <img src="assets/images/Button_Next.png" alt="Далее" class="next-btn" id="btn-next">
         </div>
@@ -1110,7 +1133,7 @@
                             *ВЫБОР КЛАССА ИГРЫ:*<br>
                             В игре доступны два класса, которые отличаются уровнем сложности:<br>
                             <b>Классический</b> — при захвате шашки отображается стрелка, показывающая направление и силу удара.<br>
-                            
+
                         </span>
                         <span class="info-text-en hidden">
                             *GAME OBJECTIVE:*<br>
@@ -1119,7 +1142,7 @@
                             *GAME CLASS SELECTION:*<br>
                             Two game classes are available, differing in difficulty level:<br>
                             <b>Classic</b> — when you grab a checker, an arrow is displayed, showing the direction and power of your strike.<br>
-                            
+
                         </span>
                     </div>
                 </div>
@@ -1137,19 +1160,20 @@
                 <div class="info-text">
                     <div class="info-text-content">
                         <span class="info-text-ru-2">
-                            <b>Идеальный выбор для новичков и тех, кто хочет видеть все параметры своего хода.<br>
-                            <b>Классический PRO</b> — стрелка силы и направления удара <b>не отображается</b>.<br>
-                            Вам предстоит полагаться только на свою интуицию, опыт и точность расчёта.<br>
-                            Режим для настоящих профессионалов!<br>
-                            <br>
-                            *ИГРОВАЯ МЕХАНИКА:*<br>
-                            Коснитесь пальцем одной из ваших шашек и проведите в противоположную от шашек противника сторону, не отпуская пальца. Отпустив палец, вы произведете удар. Чем дальше отведёте палец, тем сильнее будет удар. Ориентируйтесь на красную стрелку - она показывает направление удара.<br><br>
-                            *ОСОБЕННОСТИ:*<br>
-                            Вы можете двигать игровое поле влево и вправо, чтобы выбрать наилучшую позицию для нанесения удара шашкой, которая располагается близко к правой или левой границе экрана.
+                            
+                                Идеальный выбор для новичков и тех, кто хочет видеть все параметры своего хода.<br>
+                                <b>Классический PRO</b> — стрелка силы и направления удара не отображается.<br>
+                                Вам предстоит полагаться только на свою интуицию, опыт и точность расчёта.<br>
+                                Режим для настоящих профессионалов!<br>
+                                <br>
+                                *ИГРОВАЯ МЕХАНИКА:*<br>
+                                Коснитесь пальцем одной из ваших шашек и проведите в противоположную от шашек противника сторону, не отпуская пальца. Отпустив палец, вы произведете удар. Чем дальше отведёте палец, тем сильнее будет удар. Ориентируйтесь на красную стрелку - она показывает направление удара.<br><br>
+                                *ОСОБЕННОСТИ:*<br>
+                                Вы можете двигать игровое поле влево и вправо, чтобы выбрать наилучшую позицию для нанесения удара шашкой, которая располагается близко к правой или левой границе экрана.
                         </span>
                         <span class="info-text-en-2 hidden">
                             An ideal choice for beginners and those who want to see all the parameters of their move.<br>
-                            <b>Classic PRO</b> — the arrow showing power and direction is <b>not displayed</b>.<br>
+                            <b>Classic PRO</b> — the arrow showing power and direction is not displayed.<br>
                             You will have to rely solely on your intuition, experience, and precision.<br>
                             <br>
                             A mode for true professionals!
@@ -1436,7 +1460,7 @@
 
         // ========== РЕКЛАМА ==========
         let roundCounter = 0;
-        const FULLSCREEN_AD_INTERVAL = 6;
+        const FULLSCREEN_AD_INTERVAL = 10;
 
         async function checkNativeAds(adFormat) {
             if (!isInVK || !vkBridge || !isVKBridgeReady) {
@@ -1692,10 +1716,10 @@
                     const whitePercent = total > 0 ? Math.round((whiteWins / total) * 100) : 0;
 
                     row.innerHTML = `
-                            <span class="stats-value-total">${total}</span>
-                            <span class="stats-value-red">${redWins} (${redPercent}%)</span>
-                            <span class="stats-value-white">${whiteWins} (${whitePercent}%)</span>
-                        `;
+                                <span class="stats-value-total">${total}</span>
+                                <span class="stats-value-red">${redWins} (${redPercent}%)</span>
+                                <span class="stats-value-white">${whiteWins} (${whitePercent}%)</span>
+                            `;
                     container.appendChild(row);
                 });
             });
@@ -1708,7 +1732,178 @@
         }
 
         // ========== ВЕРСИЯ ИГРЫ ==========
-        const GAME_VERSION = "1.1.4";
+        const GAME_VERSION = "1.1.5";
+
+        // ========== ПРЕЛОАДЕР (ЗАГРУЗЧИК) ==========
+        let totalAssets = 0;
+        let loadedAssets = 0;
+
+        function updateLoadingProgress() {
+            loadedAssets++;
+            const progress = Math.round((loadedAssets / totalAssets) * 100);
+            const bar = document.getElementById('loading-bar');
+            const text = document.getElementById('loading-text');
+            if (bar) bar.style.width = Math.min(100, progress) + '%';
+            if (text) text.textContent = Math.min(100, progress) + '%';
+        }
+
+        function updateLoadingProgress() {
+            loadedAssets++;
+            const progress = Math.round((loadedAssets / totalAssets) * 100);
+            const bar = document.getElementById('loading-bar');
+            const text = document.getElementById('loading-text');
+            if (bar) bar.style.width = Math.min(100, progress) + '%';
+            if (text) text.textContent = Math.min(100, progress) + '%';
+        }
+
+        function preloadAssets(callback) {
+            console.log('🔄 Начало предзагрузки ресурсов...');
+
+            const imagesToLoad = [
+                'assets/images/BackFone_Main.png',
+                'assets/images/BackFone_start.png',
+                'assets/images/BackFone_SecondForm.png',
+                'assets/images/BackFone_Game.png',
+                'assets/images/BackFone_Win.png',
+                'assets/images/BackFone_Lose.png',
+                'assets/images/Sign_Settings.png',
+                'assets/images/Sign_Settings_EN.png',
+                'assets/images/Sign_Battle.png',
+                'assets/images/Sign_Battle_EN.png',
+                'assets/images/Sign_Info.png',
+                'assets/images/Sign_Info_EN.png',
+                'assets/images/Sign_Score.png',
+                'assets/images/Sign_Score_EN.png',
+                'assets/images/Sign_Final_Win.png',
+                'assets/images/Sign_Final_Win_EN.png',
+                'assets/images/Sign_Final_Lost.png',
+                'assets/images/Sign_Final_Lost_EN.png',
+                'assets/images/Button_Next.png',
+                'assets/images/Button_Next_EN.png',
+                'assets/images/Button_to_fight.png',
+                'assets/images/Button_to_fight_EN.png',
+                'assets/images/Button_to_menu_1.png',
+                'assets/images/Button_to_menu_1_EN.png',
+                'assets/images/Button_to_menu_2.png',
+                'assets/images/Button_to_menu_2_EN.png',
+                'assets/images/Button_to_menu_3.png',
+                'assets/images/Button_to_menu_3_EN.png',
+                'assets/images/Button_to_menu_4.png',
+                'assets/images/Button_info.png',
+                'assets/images/Button_score.png',
+                'assets/images/VK_AEK_games.png',
+                'assets/images/Button_resume.png',
+                'assets/images/Button_resume_EN.png',
+                'assets/images/GameTable.png',
+                'assets/images/Label_star.png',
+                'assets/images/Label_cross.png',
+                'assets/images/Shashka_red.png',
+                'assets/images/Shashka_white.png',
+                'assets/images/Button_choose_class_1.png',
+                'assets/images/Button_choose_class_1_EN.png',
+                'assets/images/Button_choose_class_2.png',
+                'assets/images/Button_choose_class_2_EN.png',
+                'assets/images/Button_choose_player_red.png',
+                'assets/images/Button_choose_player_red_EN.png',
+                'assets/images/Button_choose_player_white.png',
+                'assets/images/Button_choose_player_white_EN.png',
+                'assets/images/Button_choose_player_cases.png',
+                'assets/images/Button_choose_player_cases_EN.png',
+                'assets/images/Button_choose_sound_on.png',
+                'assets/images/Button_choose_sound_on_EN.png',
+                'assets/images/Button_choose_sound_off.png',
+                'assets/images/Button_choose_sound_off_EN.png',
+                'assets/images/Sign_choose_game_field_Last_fight.png',
+                'assets/images/Sign_choose_game_field_Last_fight_EN.png',
+                'assets/images/Sign_choose_game_field_Straight_attack_easy.png',
+                'assets/images/Sign_choose_game_field_Straight_attack_easy_EN.png',
+                'assets/images/Sign_choose_game_field_Straight_attack_hard.png',
+                'assets/images/Sign_choose_game_field_Straight_attack_hard_EN.png',
+                'assets/images/Sign_turn_red.png',
+                'assets/images/Sign_turn_red_EN.png',
+                'assets/images/Sign_turn_white.png',
+                'assets/images/Sign_turn_white_EN.png',
+                'assets/images/Button_turn_left.png',
+                'assets/images/Button_turn_right.png',
+                'assets/images/Button_lang_RU.png',
+                'assets/images/Button_lang_EN.png',
+                'assets/images/Button_left_0_1.png',
+                'assets/images/Button_right_0_2.png',
+                'assets/images/Button_left_1_1.png',
+                'assets/images/Button_right_1_2.png',
+                'assets/images/Button_left_2_1.png',
+                'assets/images/Button_right_2_2.png',
+                'assets/images/Button_left_3_1.png',
+                'assets/images/Button_right_3_2.png',
+                'assets/images/Button_Agree_Form_agreemment.png',
+                'assets/images/Button_Agree_Form_agreemment_EN.png',
+                'assets/images/Button_Cancel_Form_agreemment.png',
+                'assets/images/Button_Cancel_Form_agreemment_EN.png',
+                'assets/images/Form_agreemment.png'
+            ];
+
+            let totalAssets = imagesToLoad.length;
+            let loadedCount = 0;
+            let isCallbackCalled = false;
+            const startTime = Date.now();
+
+            function updateLoadingProgress() {
+                loadedCount++;
+                const progress = Math.round((loadedCount / totalAssets) * 100);
+                const bar = document.getElementById('loading-bar');
+                const text = document.getElementById('loading-text');
+                if (bar) bar.style.width = Math.min(100, progress) + '%';
+                if (text) text.textContent = Math.min(100, progress) + '%';
+            }
+
+            function checkComplete() {
+                if (isCallbackCalled) return;
+                const minLoadTime = 4000; // минимум 4 секунды
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, minLoadTime - elapsed);
+
+                setTimeout(function () {
+                    if (!isCallbackCalled) {
+                        isCallbackCalled = true;
+                        console.log('✅ Все ресурсы загружены!');
+                        callback();
+                    }
+                }, remaining);
+            }
+
+            if (totalAssets === 0) {
+                callback();
+                return;
+            }
+
+            imagesToLoad.forEach(function (src) {
+                var img = new Image();
+                img.onload = function () {
+                    updateLoadingProgress();
+                    console.log('✅ Загружено: ' + src + ' (' + loadedCount + '/' + totalAssets + ')');
+                    if (loadedCount >= totalAssets) {
+                        checkComplete();
+                    }
+                };
+                img.onerror = function () {
+                    updateLoadingProgress();
+                    console.warn('⚠️ Ошибка загрузки: ' + src);
+                    if (loadedCount >= totalAssets) {
+                        checkComplete();
+                    }
+                };
+                img.src = src;
+            });
+
+            // Фолбек: если что-то пошло не так
+            setTimeout(function () {
+                if (!isCallbackCalled) {
+                    isCallbackCalled = true;
+                    console.warn('⏰ Таймаут загрузки, принудительный переход...');
+                    callback();
+                }
+            }, 6000);
+        }
 
         function setGameVersions() {
             const versionStart = document.getElementById('game-version-start');
@@ -1771,11 +1966,16 @@
                 switchInfoPage(1);
             }
 
-            if (screenId === 'screen_game' || screenId === 'screen_final_win' || screenId === 'screen_final_lost') {
-                hideBannerAd();
-            } else {
-                showBannerAd();
-            }
+            // Показываем баннер на всех формах кроме игровой и победы, и поражения
+            // if (screenId === 'screen_game' || screenId === 'screen_final_win' || screenId === 'screen_final_lost') {
+            //     hideBannerAd();
+            // } else {
+            //     showBannerAd();
+            // }
+
+            // Показываем баннер на всех экранах, включая игровой
+            showBannerAd();
+
         }
 
         // ========== ЗВУКИ ==========
@@ -3064,8 +3264,10 @@
             const RADIUS = STONE_SIZE / 2;
             const OFFSETS = [
                 { baseX: 0, baseY: 0 },
-                { baseX: -RADIUS * 0.8, baseY: 0 },
-                { baseX: RADIUS * 0.8, baseY: 0 }
+                { baseX: -RADIUS * 1.5, baseY: 0 },      // Увеличили разброс
+                { baseX: RADIUS * 1.5, baseY: 0 },       // Увеличили разброс
+                { baseX: 0, baseY: -RADIUS * 1.2 },      // Добавили смещение по Y
+                { baseX: 0, baseY: RADIUS * 1.2 }        // Добавили смещение по Y
             ];
 
             const powers = [];
@@ -3074,13 +3276,13 @@
             }
 
             let topMoves = [];
-            const TOP_MOVES_COUNT = 4;
+            const TOP_MOVES_COUNT = 2;
 
             for (let stone of whiteStones) {
                 for (let red of redStones) {
                     for (let offset of OFFSETS) {
-                        const randomNoiseX = (Math.random() - 0.5) * 50;
-                        const randomNoiseY = (Math.random() - 0.5) * 50;
+                        const randomNoiseX = (Math.random() - 0.5) * 120;
+                        const randomNoiseY = (Math.random() - 0.5) * 120;
                         const targetX = red.x + offset.baseX + randomNoiseX;
                         const targetY = red.y + offset.baseY + randomNoiseY;
 
@@ -3325,6 +3527,13 @@
         async function init() {
             console.log('🚀 Запуск игры...');
 
+            // Показываем экран загрузки
+            var splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.display = 'flex';
+                splash.style.opacity = '1';
+            }
+
             checkEnvironment();
 
             if (isInVK) {
@@ -3333,17 +3542,31 @@
                 console.log('⏭️ Работа вне VK, используем fallback');
             }
 
-            setGameVersions();
-            await renderStats();
+            preloadAssets(function () {
+                setGameVersions();
+                renderStats();
 
-            document.getElementById('btn-lang-ru').classList.remove('hidden');
-            document.getElementById('btn-lang-en').classList.add('hidden');
-            changeLanguage(false);
+                document.getElementById('btn-lang-ru').classList.remove('hidden');
+                document.getElementById('btn-lang-en').classList.add('hidden');
+                changeLanguage(false);
 
-            console.log('✅ Игра готова!');
+                // Скрываем экран загрузки
+                if (splash) {
+                    splash.style.transition = 'opacity 0.5s ease';
+                    splash.style.opacity = '0';
+                    setTimeout(function () {
+                        splash.style.display = 'none';
+                    }, 500);
+                }
+
+                fitGameToScreen();
+                document.body.classList.add('screen-next-active');
+
+                console.log('✅ Игра готова!');
+            });
         }
 
-        init();
+     init();
     </script>
 </body>
 </html>
