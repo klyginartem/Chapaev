@@ -1733,19 +1733,20 @@
 
         // ========== ВЕРСИЯ ИГРЫ ==========
         const GAME_VERSION = "1.1.5";
+        function setGameVersions() {
+            const versionElements = document.querySelectorAll('.game-version, #game-version-start, #game-version-info, #game-version-info-2');
+            const isEnglish = document.getElementById('btn-lang-ru')?.classList.contains('hidden') || false;
 
+            versionElements.forEach(el => {
+                if (el) {
+                    const prefix = isEnglish ? 'Version:' : 'Версия:';
+                    el.textContent = `${prefix} ${GAME_VERSION}`;
+                }
+            });
+        }
         // ========== ПРЕЛОАДЕР (ЗАГРУЗЧИК) ==========
         let totalAssets = 0;
         let loadedAssets = 0;
-
-        function updateLoadingProgress() {
-            loadedAssets++;
-            const progress = Math.round((loadedAssets / totalAssets) * 100);
-            const bar = document.getElementById('loading-bar');
-            const text = document.getElementById('loading-text');
-            if (bar) bar.style.width = Math.min(100, progress) + '%';
-            if (text) text.textContent = Math.min(100, progress) + '%';
-        }
 
         function updateLoadingProgress() {
             loadedAssets++;
@@ -1842,33 +1843,69 @@
                 'assets/images/Form_agreemment.png'
             ];
 
-            let totalAssets = imagesToLoad.length;
-            let loadedCount = 0;
+            totalAssets = imagesToLoad.length;
+            loadedAssets = 0;
             let isCallbackCalled = false;
+            let isLoadingComplete = false;
             const startTime = Date.now();
-
-            function updateLoadingProgress() {
-                loadedCount++;
-                const progress = Math.round((loadedCount / totalAssets) * 100);
-                const bar = document.getElementById('loading-bar');
-                const text = document.getElementById('loading-text');
-                if (bar) bar.style.width = Math.min(100, progress) + '%';
-                if (text) text.textContent = Math.min(100, progress) + '%';
-            }
+            const MIN_LOAD_TIME = 2000; // Минимум времени висит лоадер - 2 секунды
 
             function checkComplete() {
                 if (isCallbackCalled) return;
-                const minLoadTime = 4000; // минимум 4 секунды
+                if (!isLoadingComplete) return;
+
                 const elapsed = Date.now() - startTime;
-                const remaining = Math.max(0, minLoadTime - elapsed);
+                const remaining = Math.max(0, MIN_LOAD_TIME - elapsed);
+
+                console.log(`✅ Все ресурсы загружены! Ждём ещё ${remaining}мс для плавности...`);
 
                 setTimeout(function () {
                     if (!isCallbackCalled) {
                         isCallbackCalled = true;
-                        console.log('✅ Все ресурсы загружены!');
+                        console.log('✅ Загрузка завершена! (прошло ' + (Date.now() - startTime) + 'мс)');
                         callback();
                     }
                 }, remaining);
+            }
+
+            function showInternetError() {
+                if (isCallbackCalled) return;
+                isCallbackCalled = true;
+
+                console.warn('⏰ Аварийный таймаут (60с). Загружено: ' + loadedAssets + '/' + totalAssets);
+
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.innerHTML = `
+                <div style="text-align: center; color: #fff; font-family: Arial, sans-serif;">
+                    <div style="font-size: 100px; margin-bottom: 30px;">📡</div>
+                    <div style="font-size: 40px; font-weight: bold; margin-bottom: 20px; color: #ff6b6b;">Нет соединения</div>
+                    <div style="font-size: 28px; margin-bottom: 30px; color: #ccc; max-width: 600px; padding: 0 20px;">
+                        Похоже отсутствует интернет или его совсем нет.<br>
+                        Повторите попытку позже.
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button onclick="location.reload()" style="
+                            padding: 20px 60px;
+                            font-size: 30px;
+                            background: linear-gradient(90deg, #ff4444, #ff8888);
+                            color: white;
+                            border: none;
+                            border-radius: 16px;
+                            cursor: pointer;
+                            font-family: Arial, sans-serif;
+                            box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
+                            transition: transform 0.2s;
+                        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onmousedown="this.style.transform='scale(0.95)'">
+                            🔄 Попробовать снова
+                        </button>
+                    </div>
+                </div>
+            `;
+                }
+
+                // Всё равно вызываем callback, чтобы игра попыталась запуститься
+                callback();
             }
 
             if (totalAssets === 0) {
@@ -1876,48 +1913,51 @@
                 return;
             }
 
+            // Загружаем изображения
             imagesToLoad.forEach(function (src) {
                 var img = new Image();
                 img.onload = function () {
                     updateLoadingProgress();
-                    console.log('✅ Загружено: ' + src + ' (' + loadedCount + '/' + totalAssets + ')');
-                    if (loadedCount >= totalAssets) {
+                    console.log('✅ Загружено: ' + src + ' (' + loadedAssets + '/' + totalAssets + ')');
+                    if (loadedAssets >= totalAssets) {
+                        isLoadingComplete = true;
                         checkComplete();
                     }
                 };
                 img.onerror = function () {
                     updateLoadingProgress();
-                    console.warn('⚠️ Ошибка загрузки: ' + src);
-                    if (loadedCount >= totalAssets) {
+                    console.warn('⚠️ Ошибка загрузки: ' + src + ', пропускаем...');
+                    if (loadedAssets >= totalAssets) {
+                        isLoadingComplete = true;
                         checkComplete();
                     }
                 };
                 img.src = src;
             });
 
-            // Фолбек: если что-то пошло не так
+            // Аварийный таймаут через 60 секунд если лоадер не загрузил всё
             setTimeout(function () {
                 if (!isCallbackCalled) {
-                    isCallbackCalled = true;
-                    console.warn('⏰ Таймаут загрузки, принудительный переход...');
-                    callback();
+                    showInternetError();
                 }
-            }, 6000);
-        }
+            }, 60000);
 
-        function setGameVersions() {
-            const versionStart = document.getElementById('game-version-start');
-            if (versionStart) {
-                versionStart.textContent = `v${GAME_VERSION}`;
-            }
-            const versionInfo = document.getElementById('game-version-info');
-            if (versionInfo) {
-                versionInfo.textContent = `Версия: ${GAME_VERSION}`;
-            }
-            const versionInfo2 = document.getElementById('game-version-info-2');
-            if (versionInfo2) {
-                versionInfo2.textContent = `Версия: ${GAME_VERSION}`;
-            }
+            // ДОПОЛНИТЕЛЬНО: если через 5 секунд ничего не загрузилось,
+            // возможно проблема с путями — показываем ошибку
+            setTimeout(function () {
+                if (loadedAssets === 0 && !isCallbackCalled) {
+                    console.warn('⚠️ Через 5 секунд не загружено ни одного изображения! Проверьте пути.');
+                    // Пробуем загрузить хотя бы одно изображение для проверки
+                    const testImg = new Image();
+                    testImg.onload = function () {
+                        console.log('✅ Тестовое изображение загрузилось! Пути правильные.');
+                    };
+                    testImg.onerror = function () {
+                        console.error('❌ Тестовое изображение НЕ загрузилось! Проверьте папку assets/images/');
+                    };
+                    testImg.src = 'assets/images/BackFone_Main.png';
+                }
+            }, 5000);
         }
 
         // ========== ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ С МЕНЯЮЩИМСЯ ФОНОМ ==========
@@ -2088,6 +2128,7 @@
         }
 
         // ========== ОБРАБОТЧИКИ КНОПОК ==========
+        // ========== переключение после нажатия кнопки ПРОДОЛЖИТЬ и 3 сек висит форма перед формой настроек ==========
         document.getElementById('btn-next').addEventListener('click', () => {
             playSound('StartSound.mp3');
             switchScreen('screen_start');
